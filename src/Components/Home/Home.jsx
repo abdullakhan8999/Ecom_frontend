@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./Components/Header/Header.jsx";
+import Header from "../Header/Header";
 import Slider from "./Slider.jsx";
 const Home = () => {
   return (
