@@ -55,7 +55,7 @@ const Header = () => {
     <nav className="bg-white border-gray-200">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
-          to={"/home"}
+          to={"/"}
           className="flex items-center font-bold text-lg min-w-940:text-2xl hover:text-sky-400"
         >
           <FaShoppingCart size={24} className=" text-xs mr-2" />
@@ -171,7 +171,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                to="/profile"
+                to="/products"
                 //  title={user && user.name}
                 className="block py-2 pl-3 pr-4 min-w-940:px-0 font-bold text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
               >
@@ -192,7 +192,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                to="/profile"
+                to="/contact"
                 //  title={user && user.name}
                 className="block py-2 pl-3 pr-4 min-w-940:px-0 font-bold text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
               >
@@ -209,7 +209,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                to="/profile"
+                to="/about"
                 //  title={user && user.name}
                 className="block py-2 pl-3 pr-4 min-w-940:px-0 font-bold text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
               >
@@ -230,7 +230,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                to="/profile"
+                to="/cart"
                 //  title={user && user.name}
                 className="block py-2 pl-3 pr-4 min-w-940:px-0 text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
               >
@@ -251,7 +251,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                to="/profile"
+                to="/user"
                 //  title={user && user.name}
                 className="block py-2 pl-3 pr-4 min-w-940:px-0 text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
               >
