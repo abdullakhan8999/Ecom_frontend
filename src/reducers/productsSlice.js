@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
    products: [],
    productsLoading: false,
+   status: "",
    error: null,
    productsCount: 0,
    resultPerPage: 10,
@@ -19,8 +20,10 @@ const productsSlice = createSlice({
       },
       productsReceived: (state, action) => {
          state.productsLoading = false;
+         state.status = action.payload.status;
          state.products = action.payload.products;
          state.productsCount = action.payload.productsCount;
+         state.resultPerPage = action.payload.resultPerPage;
          state.filteredProductsCount = action.payload.filteredProductsCount;
       },
       productsRequestFailed: (state, action) => {

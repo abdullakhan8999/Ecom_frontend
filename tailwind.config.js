@@ -11,6 +11,11 @@ export default {
       },
     },
   },
-  plugins: [],
+  variants: {
+    extend: {
+      textDecoration: ['hover', 'focus', 'group-hover'],
+    },
+  },
+  plugins: [require('tailwind-scrollbar-hide')],
 }
 

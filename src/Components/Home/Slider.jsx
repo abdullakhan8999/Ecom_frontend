@@ -45,7 +45,7 @@ const Slider = () => {
   }, [currentIndex]);
 
   return (
-    <div className="flex items-center justify-center w-full">
+    <div className="flex items-center justify-center w-full -z-10">
       <div className="w-full">
         <div className="relative group transition-opacity duration-500">
           <img

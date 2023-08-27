@@ -87,7 +87,7 @@ const Header = () => {
             <input
               type="text"
               id="search-navbar"
-              className="block w-full min-w-[250px] p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+              className="block w-full min-w-[250px] z-10 p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
               placeholder="Search..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
