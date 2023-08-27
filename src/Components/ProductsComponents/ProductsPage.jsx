@@ -29,6 +29,7 @@ const ProductsPage = () => {
     error,
     products,
     productsCount,
+    productsLoading,
     resultPerPage,
     filteredProductsCount,
   } = useSelector((state) => state.products);
@@ -43,20 +44,20 @@ const ProductsPage = () => {
   const [showFilter, setShowFilter] = useState(false);
   // Page Loading
   useEffect(() => {
-    if (isUiLoading) {
+    if (isUiLoading || productsLoading) {
       setIsLoadingProductsPage(true);
     } else {
       setIsLoadingProductsPage(false);
     }
-  }, [isUiLoading]);
+  }, [isUiLoading, productsLoading]);
 
   // Loading products
-  // useEffect(() => {
-  //   dispatch(startUiLoading());
-  //   setTimeout(() => {
-  //     dispatch(stopUiLoading());
-  //   }, 2000);
-  // }, []);
+  useEffect(() => {
+    dispatch(startUiLoading());
+    setTimeout(() => {
+      dispatch(stopUiLoading());
+    }, 2000);
+  }, []);
 
   // Fetch products
   useEffect(() => {
