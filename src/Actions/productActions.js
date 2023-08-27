@@ -4,7 +4,7 @@ import { featuredProductsReceived, featuredProductsRequestFailed, featuredProduc
 import { productsReceived, productsRequestFailed, productsRequested } from '../reducers/productsSlice';
 
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com';
-// baseURL = "http://localhost:4000/api/v1";
+// BASE_URL = "http://localhost:4000";
 
 
 
