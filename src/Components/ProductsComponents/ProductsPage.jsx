@@ -134,13 +134,13 @@ const ProductsPage = () => {
                     <input
                       type="range"
                       id="price"
-                      value={price[1]} // Use the desired value here
+                      value={price[1]}
                       onChange={(e) =>
-                        priceHandler(e, [price[0], +e.target.value])
+                        priceHandler([price[0], +e.target.value])
                       }
                       min={0}
                       max={250000}
-                      step={1} // Adjust step as needed
+                      step={1}
                     />
                     <span>${price[1]}</span>
                   </div>
