@@ -30,6 +30,10 @@ const productsSlice = createSlice({
          state.productsLoading = false;
          state.error = action.payload;
       },
+      clearError: (state, action) => {
+         state.error = null;
+         state.status = "";
+      }
    },
 });
 
@@ -37,6 +41,7 @@ export const {
    productsRequested,
    productsReceived,
    productsRequestFailed,
+   clearError
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

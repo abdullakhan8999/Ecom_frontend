@@ -1,24 +1,6 @@
 import React, { useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-
-const popularCategories = [
-  "Electronics",
-  "Fashion (Men's)",
-  "Fashion (Women's)",
-  "Fashion (Kids)",
-  "Home & Furniture",
-  "Beauty & Personal Care",
-  "Books & Stationery",
-  "Sports & Outdoors",
-  "Health & Wellness",
-  "Appliances",
-  "Toys & Games",
-  "Automotive & Tools",
-  "Jewelry & Accessories",
-  "Groceries & Gourmet Foods",
-  "Pet Supplies",
-  "Musical Instruments",
-];
+import { popularCategories } from "../../Constants/common";
 
 const Categories = () => {
   const categoriesRef = useRef(null);

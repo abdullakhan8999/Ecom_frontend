@@ -7,10 +7,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { startUiLoading, stopUiLoading } from "../../reducers/uiLoadingSlice";
 import Loader from "../Loader";
 import NewsletterSubscription from "../common/NewsletterSubscription";
+import ScrollToTop from "../common/ScrollToTop";
+import TakeToTop from "../common/TakeToTop";
 
 const Home = () => {
   const dispatch = useDispatch();
   const isUiLoading = useSelector((state) => state.uiLoading.isUiLoading);
+
+  // Scroll to top
+  useEffect(() => {
+    ScrollToTop();
+  }, []);
 
   // Loading products
   useEffect(() => {
@@ -27,7 +34,7 @@ const Home = () => {
       ) : (
         <>
           <Header />
-          <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+          <div className="max-w-screen-xl z-20 relative flex flex-wrap items-center justify-between mx-auto p-4">
             <Slider />
             <div className="w-full py-5  bg-white my-4 flex flex-col items-center justify-center">
               <p className="text-gray-600 md:text-2xl font-medium">
@@ -50,6 +57,7 @@ const Home = () => {
             </div>
             <Categories />
             <NewsletterSubscription />
+            <TakeToTop />
           </div>
         </>
       )}
