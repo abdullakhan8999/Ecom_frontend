@@ -3,7 +3,7 @@ import axios from 'axios';
 import { featuredProductsReceived, featuredProductsRequestFailed, featuredProductsRequested } from '../reducers/featuredProductsSlice';
 import { productsReceived, productsRequestFailed, productsRequested } from '../reducers/productsSlice';
 
-// let baseURL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
+let BASE_URL = 'https://ecomm-backend-5fix.onrender.com';
 // baseURL = "http://localhost:4000/api/v1";
 
 
@@ -13,7 +13,7 @@ export const fetchFeaturedProducts = () => async (dispatch) => {
    try {
       dispatch(featuredProductsRequested());
 
-      const response = await axios.get(`/api/v1/featured/products`);
+      const response = await axios.get(BASE_URL + `/api/v1/featured/products`);
       const { products, productsCount } = response.data;
 
       dispatch(featuredProductsReceived({ products, productsCount }));
@@ -32,7 +32,7 @@ export const fetchAllProducts = () => async (dispatch) => {
    try {
       dispatch(productsRequested());
 
-      const response = await axios.get(`/api/v1/products`);
+      const response = await axios.get(BASE_URL + `/api/v1/products`);
       const {
          status,
          productsCount,
