@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-const BASE_URL = 'https://ecomm-backend-5fix.onrender.com';
-// https://vitejs.dev/config/
+let BASE_URL = 'https://ecomm-backend-5fix.onrender.com';
+// BASE_URL = "http://localhost:4000"
+
 export default defineConfig({
   server: {
     proxy: {

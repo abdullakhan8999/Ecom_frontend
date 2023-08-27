@@ -20,8 +20,7 @@ export const fetchFeaturedProducts = () => async (dispatch) => {
    } catch (error) {
       console.log(error);
       console.log("Error in fetch products:", error.response?.data?.message);
-      dispatch(featuredProductsRequestFailed(error.response?.data?.message
-      ));
+      dispatch(featuredProductsRequestFailed(error.response?.data?.message));
    }
 };
 
@@ -50,7 +49,6 @@ export const fetchAllProducts = () => async (dispatch) => {
       }));
    } catch (error) {
       console.log("Error in fetch products:", error.response?.data?.message);
-      dispatch(productsRequestFailed(error.response?.data?.message
-      ));
+      dispatch(productsRequestFailed(error.response?.data?.message));
    }
 };
