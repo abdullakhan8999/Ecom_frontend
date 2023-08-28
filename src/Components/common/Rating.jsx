@@ -12,7 +12,7 @@ const Rating = ({ value }) => {
           key={index}
           className={`text-${
             index < value ? "yellow" : "gray"
-          }-500 fill-current`}
+          }-500 fill-current text-lg`}
         />
       ))}
     </div>

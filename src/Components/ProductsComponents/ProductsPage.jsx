@@ -14,6 +14,7 @@ import { Link, useParams } from "react-router-dom";
 import ScrollToTop from "../common/ScrollToTop";
 import TakeToTop from "../common/TakeToTop";
 import { popularCategories } from "../../Constants/common";
+import Rating from "../common/Rating";
 
 const ProductsPage = () => {
   const dispatch = useDispatch();
@@ -192,22 +193,25 @@ const ProductsPage = () => {
                 {products.map((product) => (
                   <div
                     key={product._id}
-                    className="bg-white p-4 rounded shadow-md"
+                    className="bg-white p-4 rounded shadow-md flex flex-col justify-between"
                   >
-                    <Link to={`/product/${product._id}`} className="group">
-                      <img
-                        src={product.images[0].url}
-                        alt={product.name}
-                        className="w-full h-48 object-cover mb-2"
-                      />
-                      <h2 className="text-lg font-semibold group-hover:underline">
-                        {product.name}
-                      </h2>
-                    </Link>
-                    <p className="text-gray-600 mb-2">
-                      ${product.price.toFixed(2)}
-                    </p>
-                    <button className="w-full py-2 bg-sky-500 text-white font-bold tracking-widest hover:bg-sky-600">
+                    <div className="">
+                      <Link to={`/product/${product._id}`} className="group">
+                        <img
+                          src={product.images[0].url}
+                          alt={product.name}
+                          className="w-full h-48 object-cover mb-2"
+                        />
+                        <h2 className="text-lg font-semibold group-hover:underline">
+                          {product.name}
+                        </h2>
+                      </Link>
+                      <p className="text-gray-600 mb-2">
+                        ${product.price.toFixed(2)}
+                      </p>
+                      <Rating value={product.ratings} />
+                    </div>
+                    <button className="w-full py-2 my-3 bg-sky-500 text-white font-bold tracking-widest hover:bg-sky-600">
                       Add to cart
                     </button>
                   </div>

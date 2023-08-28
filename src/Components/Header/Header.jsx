@@ -9,23 +9,22 @@ import {
   FaPhone,
   FaShoppingCart,
 } from "react-icons/fa";
-import { BiLogOut } from "react-icons/bi";
+import { BiLogOut, BiLogIn } from "react-icons/bi";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  // state and constants
   const navigation = useNavigate();
-
   const [searchText, setSearchText] = useState("");
-  const handleSearch = (event) => {
-    setSearchQuery(searchText);
-  };
-  const handleLogout = () => {
-    navigation("/");
-  };
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // Inside the component
   const [isSearchOpen, setIsSearchOpen] = useState(window.innerWidth > 940);
+  const [isJobsDropdownOpen, setIsJobsDropdownOpen] = useState(false);
+  const [isCompanyCategoriesDropdownOpen, setIsCompanyCategoriesDropdownOpen] =
+    useState(false);
+  const { user, loadingUser, status, token, error, isAuthenticated } =
+    useSelector((state) => state.user);
 
+  // useEffects
   useEffect(() => {
     const handleResize = () => {
       setIsSearchOpen(window.innerWidth > 940);
@@ -38,9 +37,13 @@ const Header = () => {
     };
   }, []);
 
-  const [isJobsDropdownOpen, setIsJobsDropdownOpen] = useState(false);
-  const [isCompanyCategoriesDropdownOpen, setIsCompanyCategoriesDropdownOpen] =
-    useState(false);
+  // functions
+  const handleSearch = (event) => {
+    setSearchQuery(searchText);
+  };
+  const handleLogout = () => {
+    navigation("/");
+  };
 
   const toggleJobsDropdown = () => {
     setIsJobsDropdownOpen(!isJobsDropdownOpen);
@@ -156,7 +159,7 @@ const Header = () => {
               <li>
                 <Link
                   to="/"
-                  //  title={user && user.name}
+                  title={user && user.name}
                   className="block py-2 pl-3 pr-4 min-w-940:px-0 font-bold text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
                 >
                   <div className="flex flex-col items-center group">
@@ -254,47 +257,74 @@ const Header = () => {
                   </div>
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/user"
-                  //  title={user && user.name}
-                  className="block py-2 pl-3 pr-4 min-w-940:px-0 text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
-                >
-                  <div className="flex flex-col items-center group">
-                    <FaUserCircle
-                      id="User-navbar"
-                      size={24}
-                      className=" text-xs"
-                    />
-                    <label
-                      htmlFor="User-navbar"
-                      className=" text-xs font-bold group-hover:underline "
+              {isAuthenticated ? (
+                <>
+                  <li>
+                    <Link
+                      to="/user"
+                      //  title={user && user.name}
+                      className="block py-2 pl-3 pr-4 min-w-940:px-0 text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
                     >
-                      User
-                    </label>
-                  </div>
-                </Link>
-              </li>
-              <li className="block py-2 pl-3 pr-4 min-w-940:px-0  text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0">
-                <button
-                  //  onClick={() => handleLogout()}
-                  className="flex p-0 m-0 items-center justify-center flex-col  decoration-none"
-                >
-                  <div className="flex flex-col items-center group">
-                    <BiLogOut
-                      id="Logout-navbar "
-                      size={24}
-                      className="rotate-180 text-xs"
-                    />
-                    <label
-                      htmlFor="Logout-navbar"
-                      className=" text-xs font-bold group-hover:underline "
+                      <div className="flex flex-col items-center group">
+                        <FaUserCircle
+                          id="User-navbar"
+                          size={24}
+                          className=" text-xs"
+                        />
+                        <label
+                          htmlFor="User-navbar"
+                          className=" text-xs font-bold group-hover:underline "
+                        >
+                          User
+                        </label>
+                      </div>
+                    </Link>
+                  </li>
+                  <li className="block py-2 pl-3 pr-4 min-w-940:px-0  text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0">
+                    <button
+                      //  onClick={() => handleLogout()}
+                      className="flex p-0 m-0 items-center justify-center flex-col  decoration-none"
                     >
-                      Logout
-                    </label>
-                  </div>
-                </button>
-              </li>
+                      <div className="flex flex-col items-center group">
+                        <BiLogOut
+                          id="Logout-navbar "
+                          size={24}
+                          className="rotate-180 text-xs"
+                        />
+                        <label
+                          htmlFor="Logout-navbar"
+                          className=" text-xs font-bold group-hover:underline "
+                        >
+                          Logout
+                        </label>
+                      </div>
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link
+                      to="/login"
+                      className="block py-2 pl-3 pr-4 min-w-940:px-0 text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
+                    >
+                      <div className="flex flex-col items-center group">
+                        <BiLogIn
+                          id="login-navbar"
+                          size={24}
+                          className="text-xs"
+                        />
+                        <label
+                          htmlFor="login-navbar"
+                          className=" text-xs font-bold group-hover:underline "
+                        >
+                          Login
+                        </label>
+                      </div>
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

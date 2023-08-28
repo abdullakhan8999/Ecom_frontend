@@ -9,6 +9,7 @@ import Loader from "../Loader";
 import NewsletterSubscription from "../common/NewsletterSubscription";
 import ScrollToTop from "../common/ScrollToTop";
 import TakeToTop from "../common/TakeToTop";
+import MetaData from "../common/MetaData";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const Home = () => {
       ) : (
         <>
           <Header />
+          <MetaData title={"MaNa-Ecomm-Store"} />
           <div className="max-w-screen-xl z-20 relative flex flex-wrap items-center justify-between mx-auto p-4">
             <Slider />
             <div className="w-full py-5  bg-white my-4 flex flex-col items-center justify-center">

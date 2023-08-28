@@ -1,7 +1,7 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { featuredProductsReceived, featuredProductsRequestFailed, featuredProductsRequested } from '../reducers/featuredProductsSlice';
 import { clearError, productsReceived, productsRequestFailed, productsRequested } from '../reducers/productsSlice';
+import { productReceived, productRequestFailed, productRequested } from '../reducers/productSlice';
 
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com';
 // BASE_URL = "http://localhost:4000";
@@ -23,8 +23,6 @@ export const fetchFeaturedProducts = () => async (dispatch) => {
       dispatch(featuredProductsRequestFailed(error.response?.data?.message));
    }
 };
-
-
 
 
 // get All products 
@@ -61,3 +59,20 @@ export const fetchAllProducts = (keyword = "", currentPage = 1, price = [0, 2500
 export const clearProductsErrors = () => async (dispatch) => {
    dispatch(clearError());
 };
+
+
+// get product details
+export const getProductDetails = (id) => async (dispatch) => {
+   try {
+      dispatch(productRequested());
+
+      const response = await axios.get(BASE_URL + `/api/v1/product/${id}`);
+      const { product, status } = response.data;
+
+      dispatch(productReceived({ product, status }));
+   } catch (error) {
+      console.log(error);
+      console.log("Error in fetch product details:", error.response?.data?.message);
+      dispatch(productRequestFailed(error.response?.data?.message));
+   }
+}
