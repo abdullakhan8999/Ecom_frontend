@@ -10,10 +10,12 @@ import {
   FaShoppingCart,
 } from "react-icons/fa";
 import { BiLogOut, BiLogIn } from "react-icons/bi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../../Actions/userActions";
 
 const Header = () => {
   // state and constants
+  const dispatch = useDispatch();
   const navigation = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,7 +44,7 @@ const Header = () => {
     setSearchQuery(searchText);
   };
   const handleLogout = () => {
-    navigation("/");
+    dispatch(logoutUser());
   };
 
   const toggleJobsDropdown = () => {
@@ -282,7 +284,7 @@ const Header = () => {
                   </li>
                   <li className="block py-2 pl-3 pr-4 min-w-940:px-0  text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0">
                     <button
-                      //  onClick={() => handleLogout()}
+                      onClick={() => handleLogout()}
                       className="flex p-0 m-0 items-center justify-center flex-col  decoration-none"
                     >
                       <div className="flex flex-col items-center group">

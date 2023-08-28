@@ -7,11 +7,25 @@ import Footer from "./Components/Footer.jsx";
 import ScrollToTop from "./Components/common/ScrollToTop.js";
 import MetaData from "./Components/common/MetaData.jsx";
 import LoginSignUpPage from "./Components/LoginSignUpPage/LoginSignUpPage.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserInfo } from "./Actions/userActions.js";
+import { clearError } from "./reducers/userSlice.js";
 
 const App = () => {
+  const dispatch = useDispatch();
+  const error = useSelector((state) => state.user.error);
+
   useEffect(() => {
     ScrollToTop();
+    dispatch(fetchUserInfo());
   }, []);
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        dispatch(clearError());
+      }, 2000);
+    }
+  }, [error]);
 
   return (
     <Router>

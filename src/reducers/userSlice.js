@@ -71,7 +71,21 @@ const userSlice = createSlice({
          state.status = "failed";
          state.error = action.payload.error;
       },
-
+      getUserInfoRequested: (state) => {
+         state.loadingUser = true;
+         state.error = null;
+      },
+      getUserInfoReceived: (state, action) => {
+         state.loadingUser = false;
+         state.status = action.payload.status;
+         state.user = action.payload.user;
+         state.isAuthenticated = true;
+      },
+      getUserInfoRequestFailed: (state, action) => {
+         state.loadingUser = false;
+         state.status = "failed";
+         state.error = action.payload.error;
+      },
    },
 });
 
@@ -86,6 +100,9 @@ export const {
    userLogoutRequested,
    userLogoutSuccess,
    userLogoutFailed,
+   getUserInfoRequested,
+   getUserInfoReceived,
+   getUserInfoRequestFailed,
 } = userSlice.actions;
 
 export default userSlice.reducer;

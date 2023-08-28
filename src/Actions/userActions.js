@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { clearError, userLoginReceived, userLoginRequestFailed, userLoginRequested, userLogoutFailed, userLogoutRequested, userLogoutSuccess, userSignUpReceived, userSignUpRequestFailed, userSignUpRequested } from '../reducers/userSlice';
+import { clearError, getUserInfoReceived, getUserInfoRequestFailed, getUserInfoRequested, userLoginReceived, userLoginRequestFailed, userLoginRequested, userLogoutFailed, userLogoutRequested, userLogoutSuccess, userSignUpReceived, userSignUpRequestFailed, userSignUpRequested } from '../reducers/userSlice';
 
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
-// BASE_URL = "http://localhost:4000/api/v1";
+BASE_URL = "http://localhost:4000/api/v1";
+BASE_URL = "/api/v1";
 
 // user logout
 export const logoutUser = () => async (dispatch) => {
@@ -83,3 +84,20 @@ export const login = (email, password) => async (dispatch) => {
    }
 };
 
+
+//get user info
+export const fetchUserInfo = () => async (dispatch) => {
+   try {
+      dispatch(getUserInfoRequested());
+
+      const { data } = await axios.get(BASE_URL + `/me`);
+
+      const { status, user, } = data;
+
+      dispatch(getUserInfoReceived({ status, user }));
+   } catch (error) {
+      console.log("Error while fetchUserInfo:", error);
+      console.log("Error while fetchUserInfo:", error.response?.data?.message);
+      dispatch(getUserInfoRequestFailed({ error: error.response.data.message || error }));
+   }
+};
