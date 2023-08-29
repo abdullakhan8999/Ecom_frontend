@@ -1,5 +1,29 @@
 import axios from 'axios';
-import { clearError, getUserInfoReceived, getUserInfoRequestFailed, getUserInfoRequested, userLoginReceived, userLoginRequestFailed, userLoginRequested, userLogoutFailed, userLogoutRequested, userLogoutSuccess, userPasswordChangeFailed, userPasswordChangeRequested, userPasswordChangeSuccess, userProfileUpdateFailed, userProfileUpdateRequested, userProfileUpdateSuccess, userSignUpReceived, userSignUpRequestFailed, userSignUpRequested } from '../reducers/userSlice';
+import {
+   clearError,
+   clearMessage,
+   getUserInfoReceived,
+   getUserInfoRequestFailed,
+   getUserInfoRequested,
+   passwordResetFailed,
+   passwordResetRequested,
+   passwordResetSuccess,
+   userLoginReceived,
+   userLoginRequestFailed,
+   userLoginRequested,
+   userLogoutFailed,
+   userLogoutRequested,
+   userLogoutSuccess,
+   userPasswordChangeFailed,
+   userPasswordChangeRequested,
+   userPasswordChangeSuccess,
+   userProfileUpdateFailed,
+   userProfileUpdateRequested, userProfileUpdateSuccess, userSignUpReceived, userSignUpRequestFailed,
+   userSignUpRequested,
+   setNewPasswordRequested,
+   setNewPasswordSuccess,
+   setNewPasswordFailed,
+} from '../reducers/userSlice';
 
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
 // BASE_URL = "http://localhost:4000/api/v1";
@@ -14,7 +38,7 @@ export const logoutUser = () => async (dispatch) => {
 
       dispatch(userLogoutSuccess());
    } catch (error) {
-      console.log("Error while user logout user:", error);
+      // console.log("Error while user logout user:", error);
       console.log("Error while user logout user:", error.response?.data?.message);
       dispatch(userLogoutFailed({ error: error.response.data.message || error }));
    }
@@ -40,18 +64,21 @@ export const register = (userData) => async (dispatch) => {
          token,
       }));
    } catch (error) {
-      console.log("Error while Register user:", error);
+      // console.log("Error while Register user:", error);
       console.log("Error while Register user:", error.response?.data?.message);
       dispatch(userSignUpRequestFailed({ error: error.response.data.message }));
    }
 };
-
 
 //Clear all errors
 export const clearUserErrors = () => async (dispatch) => {
    dispatch(clearError());
 };
 
+//Clear all Message
+export const clearUserMessage = () => async (dispatch) => {
+   dispatch(clearMessage());
+};
 
 // user Login
 export const login = (email, password) => async (dispatch) => {
@@ -84,7 +111,6 @@ export const login = (email, password) => async (dispatch) => {
    }
 };
 
-
 //get user info
 export const fetchUserInfo = () => async (dispatch) => {
    try {
@@ -96,7 +122,7 @@ export const fetchUserInfo = () => async (dispatch) => {
 
       dispatch(getUserInfoReceived({ status, user }));
    } catch (error) {
-      console.log("Error while fetchUserInfo:", error);
+      // console.log("Error while fetchUserInfo:", error);
       console.log("Error while fetchUserInfo:", error.response?.data?.message);
       dispatch(getUserInfoRequestFailed({ error: error.response.data.message }));
    }
@@ -112,7 +138,7 @@ export const updateUserProfile = (updatedProfile) => async (dispatch) => {
 
       dispatch(userProfileUpdateSuccess({ user: response.data.user }));
    } catch (error) {
-      console.log('Error while updating user profile:', error);
+      // console.log('Error while updating user profile:', error);
       console.log('Error message:', error.response?.data?.message);
       dispatch(userProfileUpdateFailed({ error: error.response.data.message || error }));
    }
@@ -123,13 +149,58 @@ export const changeUserPassword = (passwords) => async (dispatch) => {
    try {
       dispatch(userPasswordChangeRequested());
 
-      // Make the API call to change the user password
       await axios.put(BASE_URL + `/password/update`, passwords);
 
       dispatch(userPasswordChangeSuccess());
    } catch (error) {
-      console.log('Error while changing user password:', error);
+      // console.log('Error while changing user password:', error);
       console.log('Error message:', error.response?.data?.message);
       dispatch(userPasswordChangeFailed({ error: error.response.data.message || error }));
+   }
+};
+
+// forgot password
+export const userForgotPassword = (email) => async (dispatch) => {
+   try {
+      dispatch(passwordResetRequested());
+
+      const config = { headers: { "Content-Type": "application/json" } };
+      const { data } = await axios.post(BASE_URL + `/password/forgot`, { email }, config);
+      const { message, resetUrl, status } = data;
+
+      dispatch(passwordResetSuccess({ message, resetUrl, status }));
+
+   } catch (error) {
+      console.log('Error while Forgot password:', error);
+      console.log('Error message:', error.response?.data?.message);
+      dispatch(passwordResetFailed({ error: error.response.data.message || error }));
+   }
+};
+
+// reset new password
+export const resetNewPassword = (resetToken, passwordObj) => async (dispatch) => {
+   try {
+      dispatch(setNewPasswordRequested());
+
+      const config = { headers: { "Content-Type": "application/json" } };
+
+      const { data } = await axios.put(BASE_URL + `/password/reset/${resetToken}`, passwordObj, config);
+
+      const {
+         status,
+         user,
+         token,
+      } = data
+
+      dispatch(setNewPasswordSuccess({
+         status,
+         user,
+         token,
+      }));
+
+   } catch (error) {
+      // console.log("Error while reset new password:", error);
+      console.log("Error while reset new password:", error.response?.data?.message);
+      dispatch(setNewPasswordFailed({ error: error.response.data.message }));
    }
 };

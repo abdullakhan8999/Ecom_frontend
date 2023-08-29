@@ -14,6 +14,7 @@ import Header from "./Components/Header/Header.jsx";
 import ProfilePage from "./Components/ProfilePage/ProfilePage.jsx";
 import OrdersPage from "./Components/ProfilePage/OrdersPage.jsx";
 import DashboardPage from "./Components/ProfilePage/DashboardPage.jsx";
+import ResetPasswordPage from "./Components/ProfilePage/ResetPasswordPage.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -42,6 +43,11 @@ const App = () => {
         <Route exact path="/profile" element={<ProfilePage />} />
         <Route exact path="/orders" element={<OrdersPage />} />
         <Route exact path="/dashboard" element={<DashboardPage />} />
+        <Route
+          exact
+          path="/password/reset/:token"
+          element={<ResetPasswordPage />}
+        />
         <Route
           exact
           path="/product/:idProduct"

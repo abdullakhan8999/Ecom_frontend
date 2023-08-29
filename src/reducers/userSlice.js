@@ -5,6 +5,8 @@ const initialState = {
    loadingUser: true,
    status: "",
    token: "",
+   resetUrl: "",
+   message: "",
    error: null,
    isAuthenticated: false,
 };
@@ -35,6 +37,10 @@ const userSlice = createSlice({
       clearError: (state) => {
          state.error = null;
          state.status = "";
+      },
+      clearMessage: (state) => {
+         state.message = "";
+         state.resetUrl = "";
       },
       userSignUpRequested: (state) => {
          state.loadingUser = true;
@@ -113,6 +119,40 @@ const userSlice = createSlice({
          state.status = 'failed';
          state.error = action.payload.error;
       },
+      passwordResetRequested: (state) => {
+         state.loadingUser = true;
+         state.error = null;
+      },
+      passwordResetSuccess: (state, action) => {
+         state.loadingUser = false;
+         state.message = action.payload.message;
+         state.status = action.payload.status;
+         state.resetUrl = action.payload.resetUrl;
+      },
+      passwordResetFailed: (state, action) => {
+         state.status = 'failed';
+         state.error = action.payload.error;
+      },
+      setNewPasswordRequested: (state) => {
+         state.loadingUser = true;
+         state.error = null;
+         state.loadingUser = false;
+      },
+      setNewPasswordSuccess: (state, action) => {
+         state.loadingUser = false;
+         state.status = action.payload.status;
+         state.user = action.payload.user;
+         state.token = action.payload.token;
+         state.isAuthenticated = true;
+      },
+      setNewPasswordFailed: (state, action) => {
+         state.loadingUser = false;
+         state.status = "failed";
+         state.isAuthenticated = false;
+         state.user = {};
+         state.error = action.payload.error;
+         state.token = "";
+      },
    },
 });
 
@@ -121,6 +161,7 @@ export const {
    userLoginReceived,
    userLoginRequestFailed,
    clearError,
+   clearMessage,
    userSignUpRequested,
    userSignUpReceived,
    userSignUpRequestFailed,
@@ -136,6 +177,12 @@ export const {
    userPasswordChangeRequested,
    userPasswordChangeSuccess,
    userPasswordChangeFailed,
+   passwordResetRequested,
+   passwordResetSuccess,
+   passwordResetFailed,
+   setNewPasswordRequested,
+   setNewPasswordSuccess,
+   setNewPasswordFailed,
 } = userSlice.actions;
 
 export default userSlice.reducer;

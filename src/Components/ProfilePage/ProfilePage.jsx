@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../Loader";
 import {
   changeUserPassword,
+  clearUserErrors,
   updateUserProfile,
 } from "../../Actions/userActions";
 import showNotification from "../../util/showNotification";
@@ -48,6 +49,7 @@ const ProfilePage = () => {
   useEffect(() => {
     if (error) {
       showNotification(error, "warring");
+      dispatch(clearUserErrors());
     }
     if (status === "password_changed") {
       showNotification("Password changed successfully", "success");
@@ -128,15 +130,15 @@ const ProfilePage = () => {
             <p className="text-gray-600">Name: {user.name}</p>
             <p className="text-gray-600">Email: {user.email}</p>
             <p className="text-gray-600">Role: {user.role}</p>
-            <div className="mt-4">
+            <div className="mt-4 flex items-center gap-y-2 flex-wrap">
               <button
                 onClick={handlePasswordChangeClick}
-                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                className="bg-blue-500 text-white w-full whitespace-nowrap md:w-min px-4 py-2 rounded md:mr-2"
               >
                 Change Password
               </button>
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
+                className="bg-blue-500 text-white w-full whitespace-nowrap md:w-min px-4 py-2 rounded"
                 onClick={() => handleMyOrders()}
               >
                 My Orders

@@ -1,8 +1,20 @@
-import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { FaUser, FaEnvelope, FaEyeSlash, FaLock, FaEye } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { login, register } from "../../Actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  FaUser,
+  FaEnvelope,
+  FaEyeSlash,
+  FaLock,
+  FaEye,
+  FaTimes,
+} from "react-icons/fa";
+import {
+  clearUserErrors,
+  clearUserMessage,
+  login,
+  register,
+  userForgotPassword,
+} from "../../Actions/userActions";
 import { useNavigate } from "react-router-dom";
 import showNotification from "../../util/showNotification";
 import Loader from "../Loader";
@@ -13,7 +25,6 @@ const LoginSignUpPage = () => {
     ScrollToTop();
   }, []);
 
-  //  abdullakhan8999@gmail.com
   const dispatch = useDispatch();
   const navigation = useNavigate();
 
@@ -23,16 +34,21 @@ const LoginSignUpPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [reEnteredPassword, setReEnteredPassword] = useState("");
-  const { error, isAuthenticated, loadingUser } = useSelector(
+  const [forgotPasswordPopup, setForgotPasswordPopup] = useState(false);
+  const { error, isAuthenticated, loadingUser, message } = useSelector(
     (state) => state.user
   );
 
-  // useEffect
   useEffect(() => {
-    if (error) {
+    if (error !== "Please Login to access this resource") {
       showNotification(error, "info");
+      dispatch(clearUserErrors());
     }
-  }, [error]);
+    if (message) {
+      showNotification(message, "info");
+      dispatch(clearUserMessage());
+    }
+  }, [error, message]);
   useEffect(() => {
     if (isAuthenticated) {
       showNotification("Welcome to MaMa Ecomm", "info");
@@ -57,10 +73,9 @@ const LoginSignUpPage = () => {
     } else {
       if (password === reEnteredPassword) {
         const myForm = new FormData();
-
-        await myForm.set("name", name);
-        await myForm.set("email", email);
-        await myForm.set("password", password);
+        myForm.set("name", name);
+        myForm.set("email", email);
+        myForm.set("password", password);
         await dispatch(register(myForm));
         ScrollToTop();
         setName("");
@@ -72,12 +87,26 @@ const LoginSignUpPage = () => {
       }
     }
   };
+
+  const handleForgotPasswordClick = (e) => {
+    e.preventDefault();
+    setEmail(email);
+    setForgotPasswordPopup(true);
+  };
+
+  const handleSendOTP = async () => {
+    dispatch(userForgotPassword(email));
+    setEmail("");
+    setForgotPasswordPopup(false);
+    showNotification("Password reset link sent!", "success");
+  };
+
   return (
     <>
       {loadingUser ? (
         <Loader />
       ) : (
-        <div className="flex justify-center items-center my-10 min-h-full bg-gray-100">
+        <div className="flex justify-center items-start my-10 min-h-screen  bg-gray-100">
           <div className="bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-2xl font-semibold mb-4">
               {showLogin ? "Log In" : "Sign Up"}
@@ -147,6 +176,12 @@ const LoginSignUpPage = () => {
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                   </span>
                 </div>
+                <button
+                  className="text-xs text-gray-400 mt-2 hover:underline focus:text-blue-700"
+                  onClick={handleForgotPasswordClick}
+                >
+                  {showLogin && "Forgot Password?"}
+                </button>
               </div>
               {!showLogin && (
                 <div className="mb-4">
@@ -206,6 +241,42 @@ const LoginSignUpPage = () => {
               )}
             </p>
           </div>
+          {forgotPasswordPopup && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+              <div className="bg-white mx-2 p-8 rounded-lg shadow-md w-full md:w-[30%]">
+                <div className="flex justify-end mb-2">
+                  <button
+                    onClick={() => setForgotPasswordPopup(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+                <h2 className="text-xl font-semibold mb-4">Forgot Password</h2>
+                <div className="mb-4 w-full">
+                  <label htmlFor="forgotEmail " className="block mb-2">
+                    Enter your Email
+                  </label>
+                  <input
+                    type="email"
+                    id="forgotEmail"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-2 pr-4 py-2 w-full border rounded-lg focus:outline-none focus:border-blue-500"
+                    placeholder="Email"
+                    required
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
+                  onClick={() => handleSendOTP()}
+                >
+                  Send OTP
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </>
