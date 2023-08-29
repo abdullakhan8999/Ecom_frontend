@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { clearError, getUserInfoReceived, getUserInfoRequestFailed, getUserInfoRequested, userLoginReceived, userLoginRequestFailed, userLoginRequested, userLogoutFailed, userLogoutRequested, userLogoutSuccess, userSignUpReceived, userSignUpRequestFailed, userSignUpRequested } from '../reducers/userSlice';
+import { clearError, getUserInfoReceived, getUserInfoRequestFailed, getUserInfoRequested, userLoginReceived, userLoginRequestFailed, userLoginRequested, userLogoutFailed, userLogoutRequested, userLogoutSuccess, userPasswordChangeFailed, userPasswordChangeRequested, userPasswordChangeSuccess, userProfileUpdateFailed, userProfileUpdateRequested, userProfileUpdateSuccess, userSignUpReceived, userSignUpRequestFailed, userSignUpRequested } from '../reducers/userSlice';
 
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
 // BASE_URL = "http://localhost:4000/api/v1";
@@ -42,7 +42,7 @@ export const register = (userData) => async (dispatch) => {
    } catch (error) {
       console.log("Error while Register user:", error);
       console.log("Error while Register user:", error.response?.data?.message);
-      dispatch(userSignUpRequestFailed({ error: error.response.data.message || error }));
+      dispatch(userSignUpRequestFailed({ error: error.response.data.message }));
    }
 };
 
@@ -98,6 +98,38 @@ export const fetchUserInfo = () => async (dispatch) => {
    } catch (error) {
       console.log("Error while fetchUserInfo:", error);
       console.log("Error while fetchUserInfo:", error.response?.data?.message);
-      dispatch(getUserInfoRequestFailed({ error: error.response.data.message || error }));
+      dispatch(getUserInfoRequestFailed({ error: error.response.data.message }));
+   }
+};
+
+// update User Profile
+export const updateUserProfile = (updatedProfile) => async (dispatch) => {
+   try {
+      dispatch(userProfileUpdateRequested());
+
+      // Make the API call to update the user profile
+      const response = await axios.put(BASE_URL + `/me/update`, updatedProfile);
+
+      dispatch(userProfileUpdateSuccess({ user: response.data.user }));
+   } catch (error) {
+      console.log('Error while updating user profile:', error);
+      console.log('Error message:', error.response?.data?.message);
+      dispatch(userProfileUpdateFailed({ error: error.response.data.message || error }));
+   }
+};
+
+// change User Password
+export const changeUserPassword = (passwords) => async (dispatch) => {
+   try {
+      dispatch(userPasswordChangeRequested());
+
+      // Make the API call to change the user password
+      await axios.put(BASE_URL + `/password/update`, passwords);
+
+      dispatch(userPasswordChangeSuccess());
+   } catch (error) {
+      console.log('Error while changing user password:', error);
+      console.log('Error message:', error.response?.data?.message);
+      dispatch(userPasswordChangeFailed({ error: error.response.data.message || error }));
    }
 };

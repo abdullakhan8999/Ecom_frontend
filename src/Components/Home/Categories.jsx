@@ -1,9 +1,18 @@
+import { useDispatch } from "react-redux";
 import React, { useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { popularCategories } from "../../Constants/common";
+import { useNavigate } from "react-router-dom";
+import {
+  fetchAllProducts,
+  fetchProductsByCategory,
+} from "../../Actions/productActions";
+import { setSearchCategory } from "../../reducers/searchCategorySlice";
 
 const Categories = () => {
   const categoriesRef = useRef(null);
+  const navigation = useNavigate();
+  const dispatch = useDispatch();
 
   const scrollLeft = () => {
     if (categoriesRef.current) {
@@ -15,6 +24,11 @@ const Categories = () => {
     if (categoriesRef.current) {
       categoriesRef.current.scrollLeft += 200; // Scroll right by 200px
     }
+  };
+
+  const handleGetCategoryProducts = async (category) => {
+    dispatch(setSearchCategory(category));
+    navigation("/products");
   };
 
   return (
@@ -33,7 +47,7 @@ const Categories = () => {
           <div
             key={index}
             className="p-4 cursor-pointer min-w-[350px] h-[350px] rounded-lg shadow-md flex flex-col justify-end relative"
-            onClick={() => alert(category)}
+            onClick={() => handleGetCategoryProducts(category)}
           >
             <img
               src={`https://source.unsplash.com/350x350/?${category}`}

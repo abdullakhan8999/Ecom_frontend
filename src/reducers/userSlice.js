@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
    user: {},
-   loadingUser: false,
+   loadingUser: true,
    status: "",
    token: "",
    error: null,
@@ -86,6 +86,33 @@ const userSlice = createSlice({
          state.status = "failed";
          state.error = action.payload.error;
       },
+      userProfileUpdateRequested: (state) => {
+         state.loadingUser = true;
+         state.error = null;
+      },
+      userProfileUpdateSuccess: (state, action) => {
+         state.loadingUser = false;
+         state.status = 'profile_updated';
+         state.user = action.payload.user;
+      },
+      userProfileUpdateFailed: (state, action) => {
+         state.loadingUser = false;
+         state.status = 'failed';
+         state.error = action.payload.error;
+      },
+      userPasswordChangeRequested: (state) => {
+         state.loadingUser = true;
+         state.error = null;
+      },
+      userPasswordChangeSuccess: (state) => {
+         state.loadingUser = false;
+         state.status = 'password_changed';
+      },
+      userPasswordChangeFailed: (state, action) => {
+         state.loadingUser = false;
+         state.status = 'failed';
+         state.error = action.payload.error;
+      },
    },
 });
 
@@ -103,6 +130,12 @@ export const {
    getUserInfoRequested,
    getUserInfoReceived,
    getUserInfoRequestFailed,
+   userProfileUpdateRequested,
+   userProfileUpdateSuccess,
+   userProfileUpdateFailed,
+   userPasswordChangeRequested,
+   userPasswordChangeSuccess,
+   userPasswordChangeFailed,
 } = userSlice.actions;
 
 export default userSlice.reducer;

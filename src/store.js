@@ -5,6 +5,7 @@ import productsReducer from './reducers/productsSlice.js';
 import productReducer from './reducers/productSlice.js';
 import userReducer from './reducers/userSlice.js';
 import featuredProductsReducer from './reducers/featuredProductsSlice.js';
+import searchCategoryReducer from './reducers/searchCategorySlice.js';
 
 
 const store = configureStore({
@@ -14,6 +15,7 @@ const store = configureStore({
       products: productsReducer,
       product: productReducer,
       featuredProducts: featuredProductsReducer,
+      searchCategory: searchCategoryReducer,
    },
 });
 

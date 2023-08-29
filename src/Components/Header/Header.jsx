@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FaUserCircle,
@@ -8,15 +8,19 @@ import {
   FaInfoCircle,
   FaPhone,
   FaShoppingCart,
+  FaListAlt,
 } from "react-icons/fa";
-import { BiLogOut, BiLogIn } from "react-icons/bi";
+import { BiLogOut, BiLogIn, BiSolidDashboard, BiMenu } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../Actions/userActions";
+import { ImMenu } from "react-icons/im";
 
 const Header = () => {
   // state and constants
   const dispatch = useDispatch();
   const navigation = useNavigate();
+  const dropdownRef = useRef(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(window.innerWidth > 940);
@@ -43,19 +47,62 @@ const Header = () => {
   const handleSearch = (event) => {
     setSearchQuery(searchText);
   };
-  const handleLogout = () => {
-    dispatch(logoutUser());
-  };
-
   const toggleJobsDropdown = () => {
     setIsJobsDropdownOpen(!isJobsDropdownOpen);
     setIsCompanyCategoriesDropdownOpen(false);
   };
-
   const toggleCompanyCategoriesDropdown = () => {
     setIsJobsDropdownOpen(false);
     setIsCompanyCategoriesDropdownOpen(!isCompanyCategoriesDropdownOpen);
   };
+
+  const handleLogout = () => {
+    setIsDropdownOpen(false);
+    dispatch(logoutUser());
+  };
+  const orders = () => {
+    setIsDropdownOpen(false);
+    navigation("/orders");
+  };
+  const account = () => {
+    setIsDropdownOpen(false);
+    navigation("/profile");
+  };
+  const dashboard = () => {
+    setIsDropdownOpen(false);
+    navigation("/dashboard");
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const options = [
+    { icon: <FaUserCircle />, name: "Profile", func: account },
+    { icon: <FaListAlt />, name: "Orders", func: orders },
+    { icon: <BiLogOut />, name: "Logout", func: handleLogout },
+  ];
+  if (user && user.role === "admin") {
+    options.unshift({
+      icon: <BiSolidDashboard />,
+      name: "Dashboard",
+      func: dashboard,
+    });
+  }
+
   return (
     <>
       <nav className="bg-white border-gray-200">
@@ -260,9 +307,8 @@ const Header = () => {
                 </Link>
               </li>
               {isAuthenticated ? (
-                <>
-                  <li>
-                    <Link
+                <li>
+                  {/* <Link
                       to="/user"
                       //  title={user && user.name}
                       className="block py-2 pl-3 pr-4 min-w-940:px-0 text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
@@ -280,29 +326,70 @@ const Header = () => {
                           User
                         </label>
                       </div>
-                    </Link>
-                  </li>
-                  <li className="block py-2 pl-3 pr-4 min-w-940:px-0  text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0">
+                    </Link> */}
+                  <div
+                    className="relative inline-block md:pl-0 pl-4"
+                    ref={dropdownRef}
+                  >
                     <button
-                      onClick={() => handleLogout()}
-                      className="flex p-0 m-0 items-center justify-center flex-col  decoration-none"
+                      type="button"
+                      className="flex items-center flex-col mr-3  md:mr-0 "
+                      onClick={toggleDropdown}
                     >
-                      <div className="flex flex-col items-center group">
-                        <BiLogOut
-                          id="Logout-navbar "
-                          size={24}
-                          className="rotate-180 text-xs"
-                        />
-                        <label
-                          htmlFor="Logout-navbar"
-                          className=" text-xs font-bold group-hover:underline "
-                        >
-                          Logout
-                        </label>
-                      </div>
+                      {/* <span className="sr-only">Open user menu</span> */}
+                      <ImMenu
+                        id="user-menu-button"
+                        className="  focus:ring-4  text-gray-900 focus:ring-gray-300 text-xs"
+                        size={24}
+                      />
+                      <label
+                        htmlFor="user-menu-button"
+                        className=" text-xs font-bold group-hover:underline "
+                      >
+                        Menu
+                      </label>
                     </button>
-                  </li>
-                </>
+                    {/* Dropdown menu */}
+                    {isDropdownOpen && (
+                      <div className="z-50 absolute right-0 mt-2 ring-1 ring-slate-300 w-44 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow">
+                        <div className="px-4 py-3">
+                          <span className="block text-sm text-gray-900">
+                            {user && user.name}
+                          </span>
+                          <span className="block text-sm text-gray-500 truncate">
+                            {user && user.email}
+                          </span>
+                        </div>
+                        <div className="h-[2px] w-full bg-slate-200 rounded-full"></div>
+                        <ul className="py-2" aria-labelledby="user-menu-button">
+                          {/* <li>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              >
+                                <div className="flex items-center justify-start gap-x-2">
+                                  <BiSolidDashboard />
+                                  Dashboard
+                                </div>
+                              </a>
+                            </li> */}
+                          {options.map((option) => (
+                            <li
+                              key={option.name}
+                              className="block px-4 py-2 cursor-pointer text-sm text-gray-700 hover:bg-gray-100 "
+                              onClick={() => option.func()}
+                            >
+                              <div className="flex items-center justify-start gap-x-2">
+                                {option.icon}
+                                {option.name}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </li>
               ) : (
                 <>
                   <li>

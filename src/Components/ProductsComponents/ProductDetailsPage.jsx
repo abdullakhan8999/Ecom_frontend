@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Header from "../Header/Header";
 import Loader from "../Loader";
 import ScrollToTop from "../common/ScrollToTop";
 import { useDispatch, useSelector } from "react-redux";
 import { startUiLoading, stopUiLoading } from "../../reducers/uiLoadingSlice";
 import { useParams } from "react-router-dom";
-import { getProductDetails } from "../../Actions/productActions";
+import {
+  fetchProductsByCategory,
+  getProductDetails,
+} from "../../Actions/productActions";
 import MetaData from "../common/MetaData";
 import ProductImageSection from "./ProductImageSection.jsx";
 import Rating from "../common/Rating";
@@ -38,12 +40,19 @@ const ProductDetailsPage = () => {
   }, [isUiLoading, productLoading]);
 
   // Loading products
-  //   useEffect(() => {
-  //     dispatch(startUiLoading());
-  //     setTimeout(() => {
-  //       dispatch(stopUiLoading());
-  //     }, 2000);
-  //   }, []);
+  useEffect(() => {
+    dispatch(startUiLoading());
+    setTimeout(() => {
+      dispatch(stopUiLoading());
+    }, 2000);
+  }, []);
+
+  // Loading related products
+  useEffect(() => {
+    if (product) {
+      dispatch(fetchProductsByCategory(product.category));
+    }
+  }, [product]);
 
   return (
     <>
@@ -51,7 +60,6 @@ const ProductDetailsPage = () => {
         <Loader />
       ) : (
         <>
-          <Header />
           <MetaData title={`${product.name} -- MaNa-Ecomm-Store`} />
           <div className="max-w-screen-xl z-20 relative flex flex-wrap items-center justify-between mx-auto p-4">
             {/* Heading */}
@@ -147,6 +155,10 @@ const ProductDetailsPage = () => {
                     Brand:
                     <span className="ml-2">{product.brand}</span>
                   </p>
+                  <p>
+                    Brand:
+                    <span className="ml-2">{product.category}</span>
+                  </p>
                 </div>
                 <div className="h-[2px] w-full bg-slate-200 rounded-full mb-3"></div>
                 {product.stock > 0 && (
@@ -157,23 +169,25 @@ const ProductDetailsPage = () => {
               </div>
             </div>
 
-            <div className="h-[2px] w-full bg-slate-200 rounded-full my-8"></div>
-
-            <section className="w-full flex gap-4 items-start justify-between flex-col mx-auto">
-              <h3 className="bg-white p-2 mb-4 w-full  md:text-lg font-bold tracking-wider text-sm">
-                Related Products:
-              </h3>{" "}
-              <div className="related-product grid grid-cols-2 md:grid-cols-3 gap-4">
-                {products &&
-                  products.map(
-                    (product, i) =>
-                      product._id !== idProduct &&
-                      i <= 2 && (
-                        <ProductCard key={product._id} product={product} />
-                      )
-                  )}
-              </div>
-            </section>
+            {products && products.length > 1 && (
+              <>
+                <div className="h-[2px] w-full bg-slate-200 rounded-full my-8"></div>
+                <section className="w-full flex gap-4 items-start justify-between flex-col mx-auto">
+                  <h3 className="bg-white p-2 mb-4 w-full  md:text-lg font-bold tracking-wider text-sm">
+                    Related Products:
+                  </h3>{" "}
+                  <div className="related-product grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {products.map(
+                      (product, i) =>
+                        product._id !== idProduct &&
+                        i <= 2 && (
+                          <ProductCard key={product._id} product={product} />
+                        )
+                    )}
+                  </div>
+                </section>
+              </>
+            )}
           </div>
         </>
       )}

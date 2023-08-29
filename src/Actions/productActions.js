@@ -13,7 +13,6 @@ export const fetchFeaturedProducts = () => async (dispatch) => {
    try {
       dispatch(featuredProductsRequested());
 
-      console.log("BASE_URL", BASE_URL)
       const response = await axios.get(BASE_URL + `/featured/products`);
       const { products, productsCount } = response.data;
       dispatch(featuredProductsReceived({ products, productsCount }));
@@ -24,6 +23,30 @@ export const fetchFeaturedProducts = () => async (dispatch) => {
    }
 };
 
+// fetch Products By Category
+export const fetchProductsByCategory = (category) => async (dispatch) => {
+   try {
+      dispatch(productsRequested());
+
+      const response = await axios.get(`${BASE_URL}/products?category=${category}`);
+      const { status,
+         productsCount,
+         products,
+         resultPerPage,
+         filteredProductsCount } = response.data;
+
+      dispatch(productsReceived({
+         status,
+         productsCount,
+         products,
+         resultPerPage,
+         filteredProductsCount
+      }));
+   } catch (error) {
+      console.error("Error fetching products by category:", error.response?.data?.message);
+      dispatch(productsRequestFailed(error.response?.data?.message));
+   }
+};
 
 // get All products 
 export const fetchAllProducts = (keyword = "", currentPage = 1, price = [0, 250000], category, ratings = 0) => async (dispatch) => {

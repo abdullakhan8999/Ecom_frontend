@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Header from "../Header/Header";
 import Slider from "./Slider.jsx";
 import FeaturedProducts from "./FeaturedProducts.jsx";
 import Categories from "./Categories.jsx";
@@ -34,7 +33,6 @@ const Home = () => {
         <Loader />
       ) : (
         <>
-          <Header />
           <MetaData title={"MaNa-Ecomm-Store"} />
           <div className="max-w-screen-xl z-20 relative flex flex-wrap items-center justify-between mx-auto p-4">
             <Slider />
