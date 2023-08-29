@@ -6,11 +6,7 @@ let BASE_URL = 'https://ecomm-backend-5fix.onrender.com';
 export default defineConfig({
   server: {
     proxy: {
-      '/api/v1': {
-        target: 'https://ecomm-backend-5fix.onrender.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/v1/, ''),
-      }
+      "/api/v1": BASE_URL
     }
   },
   plugins: [react()],

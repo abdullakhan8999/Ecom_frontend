@@ -2,8 +2,8 @@ import axios from 'axios';
 import { clearError, getUserInfoReceived, getUserInfoRequestFailed, getUserInfoRequested, userLoginReceived, userLoginRequestFailed, userLoginRequested, userLogoutFailed, userLogoutRequested, userLogoutSuccess, userSignUpReceived, userSignUpRequestFailed, userSignUpRequested } from '../reducers/userSlice';
 
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
-BASE_URL = "http://localhost:4000/api/v1";
-BASE_URL = "/api/v1";
+// BASE_URL = "http://localhost:4000/api/v1";
+// BASE_URL = "/api/v1";
 
 // user logout
 export const logoutUser = () => async (dispatch) => {
