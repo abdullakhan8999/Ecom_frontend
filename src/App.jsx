@@ -10,6 +10,10 @@ import LoginSignUpPage from "./Components/LoginSignUpPage/LoginSignUpPage.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserInfo } from "./Actions/userActions.js";
 import { clearError } from "./reducers/userSlice.js";
+import Header from "./Components/Header/Header.jsx";
+import ProfilePage from "./Components/ProfilePage/ProfilePage.jsx";
+import OrdersPage from "./Components/ProfilePage/OrdersPage.jsx";
+import DashboardPage from "./Components/ProfilePage/DashboardPage.jsx";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,10 +34,14 @@ const App = () => {
   return (
     <Router>
       <MetaData title={"MaNa-Ecomm-Store"} />
+      <Header />
       <Routes>
         <Route exact path="/login" element={<LoginSignUpPage />} />
         <Route exact path="/" element={<Home />} />
         <Route exact path="/products" element={<ProductsPage />} />
+        <Route exact path="/profile" element={<ProfilePage />} />
+        <Route exact path="/orders" element={<OrdersPage />} />
+        <Route exact path="/dashboard" element={<DashboardPage />} />
         <Route
           exact
           path="/product/:idProduct"
