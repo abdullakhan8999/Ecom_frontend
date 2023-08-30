@@ -51,7 +51,6 @@ export const register = (userData) => async (dispatch) => {
 
       const config = {
          headers: { "Content-Type": "application/json" },
-         withCredentials: true,
       };
 
       const { data } = await axios.post(BASE_URL + `/register`, userData, config);
@@ -91,7 +90,6 @@ export const login = (email, password) => async (dispatch) => {
 
       const config = {
          headers: { "Content-Type": "application/json" },
-         withCredentials: true,
       };
 
       const { data } = await axios.post(
