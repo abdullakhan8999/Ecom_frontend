@@ -14,9 +14,11 @@ import Loader from "../Loader";
 import {
   changeUserPassword,
   clearUserErrors,
+  fetchUserInfo,
   updateUserProfile,
 } from "../../Actions/userActions";
 import showNotification from "../../util/showNotification";
+import ScrollToTop from "../common/ScrollToTop";
 
 const ProfilePage = () => {
   const navigation = useNavigate();
@@ -24,11 +26,17 @@ const ProfilePage = () => {
   const { isAuthenticated, user, error, loadingUser, status } = useSelector(
     (state) => state.user
   );
+  // useEffect
   useEffect(() => {
     if (!loadingUser && !isAuthenticated) {
       navigation("/login");
     }
   }, [user]);
+  // useEffect
+  useEffect(() => {
+    ScrollToTop();
+    dispatch(fetchUserInfo());
+  }, []);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
