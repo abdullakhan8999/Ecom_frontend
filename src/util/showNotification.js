@@ -3,7 +3,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const showNotification = (message, type) => {
    toast(message, {
-      position: 'top-right',
+      position: 'top-center',
       autoClose: 3000,
       hideProgressBar: false,
       newestOnTop: false,

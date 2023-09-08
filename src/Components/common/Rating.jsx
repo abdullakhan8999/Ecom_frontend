@@ -10,9 +10,9 @@ const Rating = ({ value }) => {
       {[...Array(maxRating)].map((_, index) => (
         <FaStar
           key={index}
-          className={`text-${
-            index < value ? "yellow" : "gray"
-          }-500 fill-current text-lg`}
+          className={`fill-current text-lg ${
+            index < value ? "text-yellow-500" : "text-gray-500"
+          }`}
         />
       ))}
     </div>

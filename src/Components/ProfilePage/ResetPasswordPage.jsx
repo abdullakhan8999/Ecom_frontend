@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { clearUserErrors, resetNewPassword } from "../../Actions/userActions";
 import showNotification from "../../util/showNotification";
 import Loader from "../Loader";
+import MetaData from "../common/MetaData";
 
 const ResetPasswordPage = () => {
   const navigation = useNavigate();
@@ -52,6 +53,7 @@ const ResetPasswordPage = () => {
         <Loader />
       ) : (
         <div className="max-w-screen-xl mx-auto p-4 min-h-screen">
+          <MetaData title="Reset Password | MaNa Ecomm" />
           <div className=" bg-white mx-auto md:w-[400px] shadow-lg rounded-lg p-4">
             <div className="bg-white mx-2 rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4">Change Password</h2>

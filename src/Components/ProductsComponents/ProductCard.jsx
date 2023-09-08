@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-// import { addToCart } from "../../Actions/cartActions";
 import Rating from "../common/Rating";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { addProductToCart } from "../../Actions/cartActions";
+import showNotification from "../../util/showNotification";
 
 const ProductCard = ({ product }) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [showDetails, setShowDetails] = useState(false);
 
   const handleAddToCart = () => {
-    //  dispatch(addToCart(product._id));
-    alert(product._id);
+    dispatch(addProductToCart(product._id, 1));
+    showNotification(`${product.name} Added to cart successfully`, "success");
   };
 
   return (
@@ -40,7 +40,8 @@ const ProductCard = ({ product }) => {
             <p className="text-sm md:text-lg mb-2">${product.price}</p>
             <Rating value={product.ratings} />
             <button
-              onClick={handleAddToCart}
+              onClick={() => handleAddToCart()}
+              disabled={product.stock < 1}
               className="bg-blue-500 text-white px-2 md:px-4 text-xs md:text-lg py-2 rounded-md mt-2"
             >
               Add to Cart

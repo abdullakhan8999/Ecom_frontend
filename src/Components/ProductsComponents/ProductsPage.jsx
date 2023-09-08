@@ -16,6 +16,9 @@ import TakeToTop from "../common/TakeToTop";
 import { popularCategories } from "../../Constants/common";
 import Rating from "../common/Rating";
 import { setSearchCategory } from "../../reducers/searchCategorySlice";
+import MetaData from "../common/MetaData";
+import showNotification from "../../util/showNotification";
+import { addProductToCart } from "../../Actions/cartActions";
 
 const ProductsPage = () => {
   const dispatch = useDispatch();
@@ -107,12 +110,19 @@ const ProductsPage = () => {
     setCategory(e.target.value);
   };
 
+  const handleAddToCart = (product) => {
+    dispatch(addProductToCart(product._id, 1));
+    showNotification(`${product.name} Added to cart successfully`, "success");
+  };
+
   return (
     <>
       {isLoadingProductsPage ? (
         <Loader />
       ) : (
         <div className="max-w-screen-xl mx-auto p-4 relative">
+          <MetaData title={`Store | MaNa Ecomm`} />
+
           {/* Filtering, Sorting Controls and Products */}
           <div className="flex  flex-col mb-4">
             <div
@@ -209,7 +219,11 @@ const ProductsPage = () => {
                     </p>
                     <Rating value={product.ratings} />
                   </div>
-                  <button className="w-full py-2 my-3 bg-sky-500 text-white font-bold tracking-widest hover:bg-sky-600">
+                  <button
+                    disabled={product.stock < 1}
+                    className="w-full py-2 my-3 bg-sky-500 text-white font-bold tracking-widest hover:bg-sky-600"
+                    onClick={() => handleAddToCart(product)}
+                  >
                     Add to cart
                   </button>
                 </div>

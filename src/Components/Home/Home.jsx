@@ -33,7 +33,7 @@ const Home = () => {
         <Loader />
       ) : (
         <>
-          <MetaData title={"MaNa-Ecomm-Store"} />
+          <MetaData title={"MaNa Ecomm"} />
           <div className="max-w-screen-xl z-20 relative flex flex-wrap items-center justify-between mx-auto p-4">
             <Slider />
             <div className="w-full py-5  bg-white my-4 flex flex-col items-center justify-center">

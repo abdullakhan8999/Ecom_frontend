@@ -15,7 +15,7 @@ import {
   register,
   userForgotPassword,
 } from "../../Actions/userActions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import showNotification from "../../util/showNotification";
 import Loader from "../Loader";
 import ScrollToTop from "../common/ScrollToTop";

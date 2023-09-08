@@ -14,6 +14,7 @@ import { BiLogOut, BiLogIn, BiSolidDashboard, BiMenu } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../Actions/userActions";
 import { ImMenu } from "react-icons/im";
+import { toggleCart } from "../../reducers/cartVisibilitySlice";
 
 const Header = () => {
   // state and constants
@@ -27,8 +28,8 @@ const Header = () => {
   const [isJobsDropdownOpen, setIsJobsDropdownOpen] = useState(false);
   const [isCompanyCategoriesDropdownOpen, setIsCompanyCategoriesDropdownOpen] =
     useState(false);
-  const { user, loadingUser, status, token, error, isAuthenticated } =
-    useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   // useEffects
   useEffect(() => {
@@ -225,7 +226,6 @@ const Header = () => {
               <li>
                 <Link
                   to="/products"
-                  //  title={user && user.name}
                   className="block py-2 pl-3 pr-4 min-w-940:px-0 font-bold text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
                 >
                   <div className="flex flex-col items-center group">
@@ -243,31 +243,31 @@ const Header = () => {
                   </div>
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/contact"
-                  //  title={user && user.name}
-                  className="block py-2 pl-3 pr-4 min-w-940:px-0 font-bold text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
-                >
-                  <div className="flex flex-col items-center group">
-                    <FaPhone
-                      id="contact-navbar"
-                      size={24}
-                      className=" text-xs"
-                    />
-                    <label
-                      htmlFor="contact-navbar"
-                      className=" text-xs font-bold group-hover:underline"
-                    >
-                      Contact
-                    </label>
-                  </div>
-                </Link>
-              </li>
+              {isAuthenticated && (
+                <li>
+                  <Link
+                    to="/contact"
+                    className="block py-2 pl-3 pr-4 min-w-940:px-0 font-bold text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
+                  >
+                    <div className="flex flex-col items-center group">
+                      <FaPhone
+                        id="contact-navbar"
+                        size={24}
+                        className=" text-xs"
+                      />
+                      <label
+                        htmlFor="contact-navbar"
+                        className=" text-xs font-bold group-hover:underline"
+                      >
+                        Contact
+                      </label>
+                    </div>
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link
                   to="/about"
-                  //  title={user && user.name}
                   className="block py-2 pl-3 pr-4 min-w-940:px-0 font-bold text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
                 >
                   <div className="flex flex-col items-center group">
@@ -286,12 +286,11 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  to="/cart"
-                  //  title={user && user.name}
+                <div
+                  onClick={() => dispatch(toggleCart())}
                   className="block py-2 pl-3 pr-4 min-w-940:px-0 text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
                 >
-                  <div className="flex flex-col items-center group">
+                  <div className="relative flex flex-col items-center group">
                     <FaCartArrowDown
                       id="Cart-navbar"
                       size={24}
@@ -302,31 +301,17 @@ const Header = () => {
                       className=" text-xs font-bold group-hover:underline "
                     >
                       Cart
+                      {cartItems.length > 0 && (
+                        <span className="absolute px-2 py-1 flex items-center justify-center  top-0 right-0 -mt-2 -mr-2 text-xs text-white bg-red-500 rounded-full">
+                          {cartItems.length}
+                        </span>
+                      )}
                     </label>
                   </div>
-                </Link>
+                </div>
               </li>
               {isAuthenticated ? (
                 <li>
-                  {/* <Link
-                      to="/user"
-                      //  title={user && user.name}
-                      className="block py-2 pl-3 pr-4 min-w-940:px-0 text-gray-900 rounded hover:bg-gray-100 min-w-940:hover:bg-transparent min-w-940:border-0 min-w-940:hover:text-blue-700 min-w-940:p-0"
-                    >
-                      <div className="flex flex-col items-center group">
-                        <FaUserCircle
-                          id="User-navbar"
-                          size={24}
-                          className=" text-xs"
-                        />
-                        <label
-                          htmlFor="User-navbar"
-                          className=" text-xs font-bold group-hover:underline "
-                        >
-                          User
-                        </label>
-                      </div>
-                    </Link> */}
                   <div
                     className="relative inline-block md:pl-0 pl-4"
                     ref={dropdownRef}
@@ -336,7 +321,6 @@ const Header = () => {
                       className="flex items-center flex-col mr-3  md:mr-0 "
                       onClick={toggleDropdown}
                     >
-                      {/* <span className="sr-only">Open user menu</span> */}
                       <ImMenu
                         id="user-menu-button"
                         className="  focus:ring-4  text-gray-900 focus:ring-gray-300 text-xs"
@@ -349,7 +333,6 @@ const Header = () => {
                         Menu
                       </label>
                     </button>
-                    {/* Dropdown menu */}
                     {isDropdownOpen && (
                       <div className="z-50 absolute right-0 mt-2 ring-1 ring-slate-300 w-44 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow">
                         <div className="px-4 py-3">
@@ -362,17 +345,6 @@ const Header = () => {
                         </div>
                         <div className="h-[2px] w-full bg-slate-200 rounded-full"></div>
                         <ul className="py-2" aria-labelledby="user-menu-button">
-                          {/* <li>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              >
-                                <div className="flex items-center justify-start gap-x-2">
-                                  <BiSolidDashboard />
-                                  Dashboard
-                                </div>
-                              </a>
-                            </li> */}
                           {options.map((option) => (
                             <li
                               key={option.name}

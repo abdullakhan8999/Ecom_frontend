@@ -1,4 +1,8 @@
 import axios from 'axios';
+let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
+// BASE_URL = "http://localhost:4000/api/v1";
+// BASE_URL = "/api/v1";
+
 import {
    clearError,
    clearMessage,
@@ -24,25 +28,6 @@ import {
    setNewPasswordSuccess,
    setNewPasswordFailed,
 } from '../reducers/userSlice';
-
-let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
-// BASE_URL = "http://localhost:4000/api/v1";
-// BASE_URL = "/api/v1";
-
-// user logout
-export const logoutUser = () => async (dispatch) => {
-   try {
-      dispatch(userLogoutRequested());
-
-      await axios.get(BASE_URL + `/logout`);
-
-      dispatch(userLogoutSuccess());
-   } catch (error) {
-      // console.log("Error while user logout user:", error);
-      console.log("Error while user logout user:", error.response?.data?.message);
-      dispatch(userLogoutFailed({ error: error.response.data.message || error }));
-   }
-};
 
 // Register
 export const register = (userData) => async (dispatch) => {
@@ -73,17 +58,6 @@ export const register = (userData) => async (dispatch) => {
       dispatch(userSignUpRequestFailed({ error: error.response.data.message }));
    }
 };
-
-//Clear all errors
-export const clearUserErrors = () => async (dispatch) => {
-   dispatch(clearError());
-};
-
-//Clear all Message
-export const clearUserMessage = () => async (dispatch) => {
-   dispatch(clearMessage());
-};
-
 // user Login
 export const login = (email, password) => async (dispatch) => {
    try {
@@ -123,7 +97,7 @@ export const fetchUserInfo = () => async (dispatch) => {
    try {
       dispatch(getUserInfoRequested());
       const config = {
-         withCredentials: true,
+         // withCredentials: true,
       };
       const { data } = await axios.get(BASE_URL + `/me`, config);
 
@@ -135,6 +109,31 @@ export const fetchUserInfo = () => async (dispatch) => {
       console.log("Error while fetchUserInfo:", error.response?.data?.message);
       dispatch(getUserInfoRequestFailed({ error: error.response.data.message }));
    }
+};
+
+// user logout
+export const logoutUser = () => async (dispatch) => {
+   try {
+      dispatch(userLogoutRequested());
+
+      await axios.get(BASE_URL + `/logout`);
+
+      dispatch(userLogoutSuccess());
+   } catch (error) {
+      // console.log("Error while user logout user:", error);
+      console.log("Error while user logout user:", error.response?.data?.message);
+      dispatch(userLogoutFailed({ error: error.response.data.message || error }));
+   }
+};
+
+//Clear all errors
+export const clearUserErrors = () => async (dispatch) => {
+   dispatch(clearError());
+};
+
+//Clear all Message
+export const clearUserMessage = () => async (dispatch) => {
+   dispatch(clearMessage());
 };
 
 // update User Profile
@@ -173,7 +172,11 @@ export const userForgotPassword = (email) => async (dispatch) => {
    try {
       dispatch(passwordResetRequested());
 
-      const config = { headers: { "Content-Type": "application/json" } };
+
+      const config = {
+         headers: { "Content-Type": "application/json" },
+         withCredentials: true
+      };
       const { data } = await axios.post(BASE_URL + `/password/forgot`, { email }, config);
       const { message, resetUrl, status } = data;
 
@@ -191,7 +194,10 @@ export const resetNewPassword = (resetToken, passwordObj) => async (dispatch) =>
    try {
       dispatch(setNewPasswordRequested());
 
-      const config = { headers: { "Content-Type": "application/json" } };
+      const config = {
+         headers: { "Content-Type": "application/json" },
+         withCredentials: true
+      };
 
       const { data } = await axios.put(BASE_URL + `/password/reset/${resetToken}`, passwordObj, config);
 
