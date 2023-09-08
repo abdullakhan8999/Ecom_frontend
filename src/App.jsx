@@ -102,7 +102,10 @@ const App = () => {
             }
           />
         )}
-        <Route path="*" element={<NotFound />} />
+        <Route
+          path={window.location.pathname === "/process/payment" ? "" : "*"}
+          element={<NotFound />}
+        />
       </Routes>
       <Footer />
     </Router>
