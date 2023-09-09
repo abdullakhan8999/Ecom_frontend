@@ -115,8 +115,10 @@ export const fetchUserInfo = () => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
    try {
       dispatch(userLogoutRequested());
-
-      await axios.get(BASE_URL + `/logout`);
+      const config = {
+         withCredentials: true,
+      };
+      await axios.get(BASE_URL + `/logout`, config)
 
       dispatch(userLogoutSuccess());
    } catch (error) {

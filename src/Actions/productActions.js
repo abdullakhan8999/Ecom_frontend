@@ -77,7 +77,7 @@ export const fetchProductsByCategory = (category) => async (dispatch) => {
       }));
    } catch (error) {
       console.error("Error fetching products by category:", error.response?.data?.message);
-      dispatch(productsRequestFailed(error.response?.data?.message));
+      dispatch(productsRequestFailed(error.response.data.message));
    }
 };
 
@@ -106,7 +106,7 @@ export const fetchAllProducts = (keyword = "", currentPage = 1, price = [0, 2500
       }));
    } catch (error) {
       console.log("Error in fetch products:", error.response?.data?.message);
-      dispatch(productsRequestFailed(error.response?.data?.message));
+      dispatch(productsRequestFailed(error.response.data.message));
    }
 };
 
@@ -131,7 +131,7 @@ export const adminGetAllProducts = () => async (dispatch) => {
    } catch (error) {
       console.log(error)
       console.log("Error in fetch products:", error.response?.data?.message);
-      dispatch(adminAllProductsFailed(error.response?.data?.message));
+      dispatch(adminAllProductsFailed(error.response.data.message));
    }
 };
 
@@ -157,7 +157,7 @@ export const getProductDetails = (id) => async (dispatch) => {
    } catch (error) {
       console.log(error);
       console.log("Error in fetch product details:", error.response?.data?.message);
-      dispatch(productRequestFailed(error.response?.data?.message));
+      dispatch(productRequestFailed(error.response.data.message));
    }
 }
 
@@ -195,7 +195,7 @@ export const adminDeleteProduct = (id) => async (dispatch) => {
    } catch (error) {
       console.log(error);
       console.log("Error while deleting product:", error.response?.data?.message);
-      dispatch(productDeleteRequestFailed(error.response?.data?.message));
+      dispatch(productDeleteRequestFailed(error.response.data.message));
    }
 }
 
