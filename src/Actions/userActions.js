@@ -97,7 +97,7 @@ export const fetchUserInfo = () => async (dispatch) => {
    try {
       dispatch(getUserInfoRequested());
       const config = {
-         // withCredentials: true,
+         withCredentials: true,
       };
       const { data } = await axios.get(BASE_URL + `/me`, config);
 
