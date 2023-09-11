@@ -224,7 +224,7 @@ const OrdersPage = () => {
                         className={`px-6 py-4 ${
                           order.orderStatus === "Processing"
                             ? "text-red-500"
-                            : "bg-green-500"
+                            : "bg-green-500 text-white"
                         }`}
                       >
                         {order.orderStatus}
