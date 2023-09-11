@@ -24,8 +24,14 @@ export const createNewContact = (formDetails) => async (dispatch) => {
    try {
       dispatch(createContactsRequest());
 
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(createContactsFail({ error: 'User not authenticated' }));
+         return;
+      }
       const config = {
-         headers: { "Content-Type": "application/json" },
+         headers: { "Content-Type": "application/json", token },
          withCredentials: true,
       };
 
@@ -41,9 +47,21 @@ export const createNewContact = (formDetails) => async (dispatch) => {
 
 // get All contacts
 export const getAllContacts = () => async (dispatch) => {
-   dispatch(getAllContactsFormsRequest());
    try {
-      const { data } = await axios.get(BASE_URL + `/getAll/contacts`);
+      dispatch(getAllContactsFormsRequest());
+
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(getAllContactsFormsFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      const { data } = await axios.get(BASE_URL + `/getAll/contacts`, config);
       const { status, contacts } = data;
       dispatch(getAllContactsFormsSuccess({ status, contacts }));
    } catch (error) {
@@ -55,9 +73,21 @@ export const getAllContacts = () => async (dispatch) => {
 
 // delete contact
 export const deleteReview = (contactId) => async (dispatch) => {
-   dispatch(deleteContactsFormsRequest());
    try {
-      await axios.delete(BASE_URL + `/delete/contact/${contactId}`);
+      dispatch(deleteContactsFormsRequest());
+
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(deleteContactsFormsFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      await axios.delete(BASE_URL + `/delete/contact/${contactId}`, config);
       dispatch(deleteContactsFormsSuccess());
    } catch (error) {
       console.log("Error delete contact", error);
@@ -69,7 +99,19 @@ export const deleteReview = (contactId) => async (dispatch) => {
 export const getContactDetails = (contactId) => async (dispatch) => {
    try {
       dispatch(getContactDetailsRequest());
-      const { data } = await axios.get(BASE_URL + `/get/contact/${contactId}`);
+
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(getContactDetailsFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      const { data } = await axios.get(BASE_URL + `/get/contact/${contactId}`, config);
       const { status, contact } = data;
       dispatch(getContactDetailsSuccess({ status, contact }));
    } catch (error) {

@@ -37,76 +37,82 @@ const OrderDetailsPage = () => {
             Order Details for Order ID: {order._id}
           </h2>
 
-          <div className="bg-white shadow-md sm:rounded-lg p-4">
-            <h3 className="text-lg font-semibold mb-2">Shipping Information</h3>
-            <p className=" w-80">{order.shippingInfo.address}</p>
-            <p>
-              {order.shippingInfo.city}, {order.shippingInfo.state},{" "}
-              {order.shippingInfo.pinCode}
-            </p>
-            <p>Country: {order.shippingInfo.country}</p>
-            <p>Phone: {order.shippingInfo.phoneNumber}</p>
+          {order.shippingInfo && (
+            <div className="bg-white shadow-md sm:rounded-lg p-4">
+              <h3 className="text-lg font-semibold mb-2">
+                Shipping Information
+              </h3>
+              <p className=" w-80">
+                {order.shippingInfo && order.shippingInfo.address}
+              </p>
+              <p>
+                {order.shippingInfo.city}, {order.shippingInfo.state},{" "}
+                {order.shippingInfo.pinCode}
+              </p>
+              <p>Country: {order.shippingInfo.country}</p>
+              <p>Phone: {order.shippingInfo.phoneNumber}</p>
 
-            <h3 className="text-lg font-semibold mt-4 mb-2">
-              Payment Information
-            </h3>
-            <p>Payment ID: {order.paymentInfo.id}</p>
-            <p>
-              Payment Status:
-              <span
-                className={`${
-                  order.paymentInfo.status ? "text-green-500" : "text-red-500"
+              <h3 className="text-lg font-semibold mt-4 mb-2">
+                Payment Information
+              </h3>
+              <p>Payment ID: {order.paymentInfo.id}</p>
+              <p>
+                Payment Status:
+                <span
+                  className={`${
+                    order.paymentInfo.status ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  &nbsp;{order.paymentInfo.status}
+                </span>
+              </p>
+
+              <h3 className="text-lg font-semibold mt-4 mb-2">Ordered Items</h3>
+              <ul>
+                {order.orderItems.map((item) => (
+                  <li key={item.product} className="mb-2">
+                    <div className="flex items-center group">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-16 h-16 object-cover rounded-md mr-4"
+                      />
+                      <div>
+                        <p
+                          className="text-lg font-semibold group-hover:underline hover:cursor-pointer"
+                          onClick={() => navigate(`/product/${item.product}`)}
+                        >
+                          {item.name}
+                        </p>
+                        <p>Price: ₹{item.price}</p>
+                        <p>Quantity: {item.quantity}</p>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              <h3 className="text-lg font-semibold mt-4">Order Summary</h3>
+              <p>Items Price: ₹{order.itemsPrice}</p>
+              <p>Tax Price: ₹{order.taxPrice}</p>
+              <p>Shipping Price: ₹{order.shippingPrice}</p>
+              <p>Total Price: ₹{order.totalPrice}</p>
+
+              <h3 className={`text-lg font-semibold mt-4`}>Order Status</h3>
+              <p
+                className={` ${
+                  order.orderStatus !== "Processing"
+                    ? "text-green-500"
+                    : "text-red-500"
                 }`}
               >
-                &nbsp;{order.paymentInfo.status}
-              </span>
-            </p>
+                {order.orderStatus}
+              </p>
 
-            <h3 className="text-lg font-semibold mt-4 mb-2">Ordered Items</h3>
-            <ul>
-              {order.orderItems.map((item) => (
-                <li key={item.product} className="mb-2">
-                  <div className="flex items-center group">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 object-cover rounded-md mr-4"
-                    />
-                    <div>
-                      <p
-                        className="text-lg font-semibold group-hover:underline hover:cursor-pointer"
-                        onClick={() => navigate(`/product/${item.product}`)}
-                      >
-                        {item.name}
-                      </p>
-                      <p>Price: ₹{item.price}</p>
-                      <p>Quantity: {item.quantity}</p>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <h3 className="text-lg font-semibold mt-4">Order Summary</h3>
-            <p>Items Price: ₹{order.itemsPrice}</p>
-            <p>Tax Price: ₹{order.taxPrice}</p>
-            <p>Shipping Price: ₹{order.shippingPrice}</p>
-            <p>Total Price: ₹{order.totalPrice}</p>
-
-            <h3 className={`text-lg font-semibold mt-4`}>Order Status</h3>
-            <p
-              className={` ${
-                order.orderStatus !== "Processing"
-                  ? "text-green-500"
-                  : "text-red-500"
-              }`}
-            >
-              {order.orderStatus}
-            </p>
-
-            <h3 className="text-lg font-semibold mt-4">Order Date</h3>
-            <p>{formatDate(order.createAt)}</p>
-          </div>
+              <h3 className="text-lg font-semibold mt-4">Order Date</h3>
+              <p>{formatDate(order.createAt)}</p>
+            </div>
+          )}
         </div>
       )}
     </>

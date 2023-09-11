@@ -54,7 +54,10 @@ const App = () => {
 
   useEffect(() => {
     ScrollToTop();
-    dispatch(fetchUserInfo());
+    const token = localStorage.getItem("token");
+    if (token) {
+      dispatch(fetchUserInfo());
+    }
     getStripeApiKey();
   }, []);
 

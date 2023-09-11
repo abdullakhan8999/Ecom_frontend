@@ -34,6 +34,7 @@ import {
    newReviewRequestFailed,
    newReviewRequested
 } from '../reducers/newReviewSlice';
+import { getUserToken } from './userActions';
 
 
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
@@ -115,8 +116,19 @@ export const adminGetAllProducts = () => async (dispatch) => {
    try {
       dispatch(adminAllProductsRequested());
 
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(adminAllProductsFailed({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
       let link = BASE_URL + `/admin/products`;
-      const response = await axios.get(link);
+      const response = await axios.get(link, config);
 
       const {
          status,
@@ -165,10 +177,18 @@ export const getProductDetails = (id) => async (dispatch) => {
 export const newReview = (reviewData) => async (dispatch) => {
    try {
       dispatch(newReviewRequested());
+
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(newReviewRequestFailed({ error: 'User not authenticated' }));
+         return;
+      }
       const config = {
-         headers: { "Content-Type": "application/json" },
-         // withCredentials: true,
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
       };
+
       const response = await axios.put(BASE_URL + `/product/review`, reviewData, config);
       const { status } = response.data;
 
@@ -188,8 +208,19 @@ export const adminDeleteProduct = (id) => async (dispatch) => {
    try {
       dispatch(productDeleteRequested());
 
-      const response = await axios.delete(BASE_URL + `/admin/product/${id}`);
-      const { status, message } = response.data;
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(productDeleteRequestFailed({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      const response = await axios.delete(BASE_URL + `/admin/product/${id}`, config);
+      const { message } = response.data;
 
       dispatch(productDeleteSuccess({ status: message }));
    } catch (error) {
@@ -204,8 +235,14 @@ export const addNewProduct = (productData) => async (dispatch) => {
    try {
       dispatch(addNewProductRequested());
 
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(addNewProductFailed({ error: 'User not authenticated' }));
+         return;
+      }
       const config = {
-         headers: { "Content-Type": "application/json" },
+         headers: { "Content-Type": "application/json", token },
          withCredentials: true,
       };
 
@@ -224,8 +261,14 @@ export const adminUpdateProduct = (id, productData) => async (dispatch) => {
    try {
       dispatch(productUpdatedRequested());
 
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(productUpdatedFailed({ error: 'User not authenticated' }));
+         return;
+      }
       const config = {
-         headers: { "Content-Type": "application/json" },
+         headers: { "Content-Type": "application/json", token },
          withCredentials: true,
       };
 

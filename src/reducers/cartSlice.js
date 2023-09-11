@@ -27,12 +27,16 @@ const cartSlice = createSlice({
          state.cartItems = state.cartItems.filter(item => item.product !== itemIdToRemove);
          localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
       },
+      resetCart: (state) => {
+         state.cartItems = [];
+         localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+      },
       saveShippingInfo: (state, action) => {
          state.shippingInfo = action.payload.data;
       }
    },
 });
 
-export const { saveShippingInfo, addToCart, removeFromCart } = cartSlice.actions;
+export const { saveShippingInfo, addToCart, removeFromCart, resetCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

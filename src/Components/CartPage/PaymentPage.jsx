@@ -17,6 +17,7 @@ import showNotification from "../../util/showNotification";
 import { useNavigate } from "react-router-dom";
 import { clearErrors } from "../../reducers/ordersSlice";
 import { newOrder } from "../../Actions/orderActions";
+import { resetCart } from "../../reducers/cartSlice";
 
 const PaymentPage = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const PaymentPage = () => {
   const elements = useElements();
   const payBtn = useRef(null);
   const orderInfo = JSON.parse(sessionStorage.getItem("orderInfo"));
-
+  let BASE_URL = "https://ecomm-backend-5fix.onrender.com/api/v1";
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { error } = useSelector((state) => state.orders);
@@ -61,14 +62,20 @@ const PaymentPage = () => {
 
     payBtn.current.disabled = true;
 
+    // Retrieve the JWT token from local storage
+    const token = localStorage.getItem("token");
+    if (!isAuthenticated || !token) {
+      showNotification("Please login to continue", "warning");
+      navigation("/login");
+      return;
+    }
     try {
       const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json", token },
+        withCredentials: true,
       };
       const { data } = await axios.post(
-        "/api/v1/payment/process",
+        BASE_URL + "/payment/process",
         paymentData,
         config
       );
@@ -96,12 +103,14 @@ const PaymentPage = () => {
         payBtn.current.disabled = false;
         showNotification(result.error.message, "warning");
       } else {
+        console.log(result.paymentIntent.status);
         if (result.paymentIntent.status === "succeeded") {
           order.paymentInfo = {
             id: result.paymentIntent.id,
             status: result.paymentIntent.status,
           };
           dispatch(newOrder(order));
+          dispatch(resetCart());
           navigation("/success");
         } else {
           showNotification(
@@ -111,6 +120,7 @@ const PaymentPage = () => {
         }
       }
     } catch (error) {
+      console.log(error);
       payBtn.current.disabled = false;
       showNotification(error.response.data.message, "warning");
     }

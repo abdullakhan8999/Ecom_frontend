@@ -20,6 +20,7 @@ import {
    deleteReviewFail,
    clearErrors,
 } from '../reducers/adminSlice';
+import { getUserToken } from './userActions';
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
 // BASE_URL = "http://localhost:4000/api/v1";
 // BASE_URL = "/api/v1";
@@ -29,7 +30,18 @@ export const adminGetAllUsers = () => async (dispatch) => {
    try {
       dispatch(getAllUsersRequest());
 
-      const { data } = await axios.get(BASE_URL + `/admin/users`);
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(getAllUsersFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      const { data } = await axios.get(BASE_URL + `/admin/users`, config);
 
       const { status, users } = data;
 
@@ -46,7 +58,18 @@ export const adminGetUserDetails = (id) => async (dispatch) => {
    try {
       dispatch(usersDetailsRequest());
 
-      const { data } = await axios.get(BASE_URL + `/admin/user/${id}`);
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(usersDetailsFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      const { data } = await axios.get(BASE_URL + `/admin/user/${id}`, config);
 
       const { user } = data;
 
@@ -63,8 +86,14 @@ export const adminUpdateUserRole = (id, updateDetails) => async (dispatch) => {
    try {
       dispatch(UpdateUserRoleRequest());
 
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(UpdateUserRoleFail({ error: 'User not authenticated' }));
+         return;
+      }
       const config = {
-         headers: { "Content-Type": "application/json" },
+         headers: { "Content-Type": "application/json", token },
          withCredentials: true,
       };
 
@@ -83,7 +112,18 @@ export const adminDeleteUser = (id) => async (dispatch) => {
    try {
       dispatch(deleteUserRequest());
 
-      await axios.delete(BASE_URL + `/admin/user/${id}`);
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(deleteUserFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      await axios.delete(BASE_URL + `/admin/user/${id}`, config);
 
       dispatch(deleteUserSuccess());
    } catch (error) {
@@ -95,14 +135,26 @@ export const adminDeleteUser = (id) => async (dispatch) => {
 
 // Action to get all reviews
 export const getAllReviews = (productId) => async (dispatch) => {
-   dispatch(getAllReviewsRequest());
    try {
-      const { data } = await axios.get(BASE_URL + `/review?id=${productId}`);
+      dispatch(getAllReviewsRequest());
+
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(getAllReviewsFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      const { data } = await axios.get(BASE_URL + `/review?id=${productId}`, config);
       const { ratings, reviews } = data;
+
       dispatch(getAllReviewsSuccess({ ratings, reviews }));
    } catch (error) {
       console.log("Error", error);
-
       console.log("Error", error.response.data.message);
       dispatch(getAllReviewsFail({ error: error.response.data.message }));
    }
@@ -110,9 +162,21 @@ export const getAllReviews = (productId) => async (dispatch) => {
 
 // Action to delete a review
 export const deleteReview = (productId, reviewId) => async (dispatch) => {
-   dispatch(deleteReviewRequest());
    try {
-      await axios.delete(BASE_URL + `/review?productId=${productId}&id=${reviewId}`);
+      dispatch(deleteReviewRequest());
+
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(deleteReviewFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      await axios.delete(BASE_URL + `/review?productId=${productId}&id=${reviewId}`, config);
       dispatch(deleteReviewSuccess());
    } catch (error) {
       console.log("Error", error);

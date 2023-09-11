@@ -205,7 +205,7 @@ const ProductsSection = () => {
                   </tbody>
                 </table>
                 {productsCount === 0 && (
-                  <p className="h-10 text-xs md:text-sm flex  bg-gray-200 items-center justify-center w-full">
+                  <p className="h-10 text-sm md:text-lg flex  bg-gray-200 items-center justify-center w-full">
                     No Products!
                   </p>
                 )}

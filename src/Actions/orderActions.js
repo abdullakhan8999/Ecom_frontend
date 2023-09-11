@@ -20,6 +20,7 @@ import {
    deleteOrderSuccess,
    deleteOrderFail,
 } from '../reducers/ordersSlice';
+import { getUserToken } from './userActions';
 let BASE_URL = 'https://ecomm-backend-5fix.onrender.com/api/v1';
 // BASE_URL = "http://localhost:4000/api/v1";
 // BASE_URL = "/api/v1";
@@ -29,9 +30,15 @@ export const newOrder = (Order) => async (dispatch) => {
 
    try {
       dispatch(createOrderRequest());
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(createOrderFail({ error: 'User not authenticated' }));
+         return;
+      }
 
       const config = {
-         headers: { "Content-Type": "application/json" },
+         headers: { "Content-Type": "application/json", token },
          withCredentials: true,
       };
 
@@ -52,8 +59,18 @@ export const newOrder = (Order) => async (dispatch) => {
 export const getMyOrders = () => async (dispatch) => {
    try {
       dispatch(getOrdersRequest());
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(getOrdersFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
 
-      const { data } = await axios.get(BASE_URL + `/orders/me`);
+      const { data } = await axios.get(BASE_URL + `/orders/me`, config);
       const { orders } = data
 
       dispatch(getOrdersSuccess({ orders }));
@@ -72,7 +89,19 @@ export const AdminGetAllOrders = () => async (dispatch) => {
    try {
       dispatch(adminAllOrdersRequested());
 
-      const { data } = await axios.get(BASE_URL + `/admin/orders`);
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(adminAllOrdersFailed({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+
+      const { data } = await axios.get(BASE_URL + `/admin/orders`, config);
       const {
          orders,
          totalAmount,
@@ -97,7 +126,18 @@ export const getOrderDetails = (id) => async (dispatch) => {
    try {
       dispatch(getOrderDetailsRequest());
 
-      const { data } = await axios.get(BASE_URL + `/order/${id}`);
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(getOrderDetailsFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      const { data } = await axios.get(BASE_URL + `/order/${id}`, config);
       const { order } = data
       dispatch(getOrderDetailsSuccess({ order }));
 
@@ -116,8 +156,14 @@ export const updateOrder = (id, Order) => async (dispatch) => {
    try {
       dispatch(UpdateOrderRequest());
 
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(UpdateOrderFail({ error: 'User not authenticated' }));
+         return;
+      }
       const config = {
-         headers: { "Content-Type": "application/json" },
+         headers: { "Content-Type": "application/json", token },
          withCredentials: true,
       };
 
@@ -140,7 +186,18 @@ export const deleteOrder = (id) => async (dispatch) => {
    try {
       dispatch(deleteOrderRequest());
 
-      await axios.delete(BASE_URL + `/admin/order/${id}`);
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(deleteOrderFail({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      await axios.delete(BASE_URL + `/admin/order/${id}`, config);
 
       dispatch(deleteOrderSuccess());
 

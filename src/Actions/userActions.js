@@ -29,6 +29,12 @@ import {
    setNewPasswordFailed,
 } from '../reducers/userSlice';
 
+//get user token
+
+export const getUserToken = () => {
+   return localStorage.getItem('token');
+}
+
 // Register
 export const register = (userData) => async (dispatch) => {
    try {
@@ -47,6 +53,11 @@ export const register = (userData) => async (dispatch) => {
          token,
       } = data
 
+      if (!token) {
+         dispatch(userSignUpRequestFailed({ error: "Internal Server Error!" }));
+      }
+      localStorage.setItem('token', token);
+
       dispatch(userSignUpReceived({
          status,
          user,
@@ -58,6 +69,7 @@ export const register = (userData) => async (dispatch) => {
       dispatch(userSignUpRequestFailed({ error: error.response.data.message }));
    }
 };
+
 // user Login
 export const login = (email, password) => async (dispatch) => {
    try {
@@ -65,7 +77,6 @@ export const login = (email, password) => async (dispatch) => {
 
       const config = {
          headers: { "Content-Type": "application/json" },
-         withCredentials: true,
       };
 
       const { data } = await axios.post(
@@ -78,6 +89,11 @@ export const login = (email, password) => async (dispatch) => {
          user,
          token,
       } = data
+
+      if (!token) {
+         dispatch(userSignUpRequestFailed({ error: "Internal Server Error!" }));
+      }
+      localStorage.setItem('token', token);
 
       dispatch(userLoginReceived({
          status,
@@ -97,9 +113,21 @@ export const fetchUserInfo = () => async (dispatch) => {
    try {
       dispatch(getUserInfoRequested());
       const config = {
-         withCredentials: true,
+         headers: { "Content-Type": "application/json" },
       };
-      const { data } = await axios.get(BASE_URL + `/me`, config);
+
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(getUserInfoRequestFailed({ error: 'User not authenticated' }));
+         return;
+      }
+
+      const { data } = await axios.get(BASE_URL + `/me`, {
+         headers: {
+            token: token,
+         },
+      }, config);
 
       const { status, user, } = data;
 
@@ -115,10 +143,9 @@ export const fetchUserInfo = () => async (dispatch) => {
 export const logoutUser = () => async (dispatch) => {
    try {
       dispatch(userLogoutRequested());
-      const config = {
-         withCredentials: true,
-      };
-      await axios.get(BASE_URL + `/logout`, config)
+
+      // await axios.get(BASE_URL + `/logout`)
+      localStorage.removeItem('token');
 
       dispatch(userLogoutSuccess());
    } catch (error) {
@@ -143,6 +170,17 @@ export const updateUserProfile = (updatedProfile) => async (dispatch) => {
    try {
       dispatch(userProfileUpdateRequested());
 
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(userProfileUpdateFailed({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
       // Make the API call to update the user profile
       const response = await axios.put(BASE_URL + `/me/update`, updatedProfile);
 
@@ -159,7 +197,18 @@ export const changeUserPassword = (passwords) => async (dispatch) => {
    try {
       dispatch(userPasswordChangeRequested());
 
-      await axios.put(BASE_URL + `/password/update`, passwords);
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(userPasswordChangeFailed({ error: 'User not authenticated' }));
+         return;
+      }
+      const config = {
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
+      };
+
+      await axios.put(BASE_URL + `/password/update`, passwords, config);
 
       dispatch(userPasswordChangeSuccess());
    } catch (error) {
@@ -174,11 +223,17 @@ export const userForgotPassword = (email) => async (dispatch) => {
    try {
       dispatch(passwordResetRequested());
 
-
+      const token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(passwordResetFailed({ error: 'User not authenticated' }));
+         return;
+      }
       const config = {
-         headers: { "Content-Type": "application/json" },
-         withCredentials: true
+         headers: { "Content-Type": "application/json", token },
+         withCredentials: true,
       };
+
       const { data } = await axios.post(BASE_URL + `/password/forgot`, { email }, config);
       const { message, resetUrl, status } = data;
 
@@ -196,9 +251,15 @@ export const resetNewPassword = (resetToken, passwordObj) => async (dispatch) =>
    try {
       dispatch(setNewPasswordRequested());
 
+      const Token = getUserToken()
+      if (!token) {
+         console.log('User not authenticated');
+         dispatch(passwordResetFailed({ error: 'User not authenticated' }));
+         return;
+      }
       const config = {
-         headers: { "Content-Type": "application/json" },
-         withCredentials: true
+         headers: { "Content-Type": "application/json", Token },
+         withCredentials: true,
       };
 
       const { data } = await axios.put(BASE_URL + `/password/reset/${resetToken}`, passwordObj, config);

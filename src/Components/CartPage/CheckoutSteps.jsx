@@ -25,7 +25,7 @@ const CheckoutSteps = ({ activeStep }) => {
       navigate("/shipping");
     }
     if (index === 1 && activeStep !== 1) {
-      navigate("/order/confirm");
+      navigate("/order_confirm");
     }
   };
 
