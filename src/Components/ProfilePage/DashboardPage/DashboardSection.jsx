@@ -34,11 +34,15 @@ const DashboardSection = ({ setActiveSection }) => {
   }, [dispatch]);
 
   let totalAmount = 0;
-  orders &&
-    orders.length > 0 &&
-    orders.forEach((item) => {
-      totalAmount += item.totalPrice;
-    });
+
+  useEffect(() => {
+    orders &&
+      orders.length > 0 &&
+      orders.forEach((item) => {
+        totalAmount += item.totalPrice;
+      });
+  }, [orders, totalAmount]);
+
   return (
     <>
       {productsLoading ? (

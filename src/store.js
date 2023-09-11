@@ -10,6 +10,7 @@ import cartReducer from './reducers/cartSlice.js';
 import cartVisibilityReducer from "./reducers/cartVisibilitySlice.js";
 import ordersReducer from "./reducers/ordersSlice.js";
 import adminReducer from "./reducers/adminSlice.js";
+import contactsReducer from "./reducers/contactsSlice.js";
 
 
 const store = configureStore({
@@ -25,6 +26,7 @@ const store = configureStore({
       orders: ordersReducer,
       newReview: newReviewReducer,
       admin: adminReducer,
+      contacts: contactsReducer,
    },
 });
 

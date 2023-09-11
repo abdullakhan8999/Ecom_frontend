@@ -82,6 +82,7 @@ const PaymentPage = () => {
       const client_secret = data.clint_secret;
 
       if (!stripe || !elements) return;
+
       const result = await stripe.confirmCardPayment(client_secret, {
         payment_method: {
           card: elements.getElement(CardNumberElement),
@@ -156,6 +157,10 @@ const PaymentPage = () => {
                 className="paymentFormBtn w-full bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
               />
             </form>
+            <div className="text-sm font-semibold mt-4">
+              <p>Example card number:</p>
+              <p>4242 4242 4242 4242</p>
+            </div>
           </div>
         </div>
       </div>

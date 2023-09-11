@@ -4,7 +4,7 @@ const contactsSlice = createSlice({
    name: "admin",
    initialState: {
       contacts: [],
-      contact: [],
+      contact: {},
       contactsLoading: false,
       status: '',
       error: null,
@@ -12,13 +12,11 @@ const contactsSlice = createSlice({
    reducers: {
       createContactsRequest: (state) => {
          state.contactsLoading = true;
-         state.contact = [];
          state.status = "";
       },
       createContactsSuccess: (state, action) => {
          state.contactsLoading = false;
-         state.contact = action.payload.contact;
-         state.status = action.payload.status;
+         state.status = "Message Sent Successfully";
       },
       createContactsFail: (state, action) => {
          state.contactsLoading = false;

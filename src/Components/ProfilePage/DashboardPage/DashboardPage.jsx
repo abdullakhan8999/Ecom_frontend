@@ -26,7 +26,7 @@ const DashboardPage = () => {
     }
   }, [user]);
 
-  const [activeSection, setActiveSection] = useState("reviews");
+  const [activeSection, setActiveSection] = useState("dashboard");
 
   return (
     <>

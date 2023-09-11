@@ -167,10 +167,10 @@ const OrdersSection = () => {
                             <FaEdit />
                           </li>
                           <li
-                            className="text-sm md:text-lg hover:text-red-500"
+                            className="text-sm md:text-lg"
                             onClick={() => handleDeleteOrderById(order)}
                           >
-                            <FaTrash />
+                            <FaTrash className="hover:text-red-500 cursor-pointer" />
                           </li>
                         </ul>
                       </td>

@@ -18,6 +18,7 @@ import {
    getContactDetailsSuccess,
    getContactDetailsFail,
 } from '../reducers/contactsSlice';
+import { getUserToken } from './userActions';
 
 //create new contact
 export const createNewContact = (formDetails) => async (dispatch) => {
@@ -36,8 +37,9 @@ export const createNewContact = (formDetails) => async (dispatch) => {
       };
 
       const { data } = await axios.post(BASE_URL + `/create/contacts`, formDetails, config);
-      const { status, savedContact } = data
-      dispatch(createContactsSuccess({ status, contact: savedContact }));
+      const { status } = data
+
+      dispatch(createContactsSuccess({ status }));
    } catch (error) {
       console.log("Error while create new contact:", error);
       console.log("Error while create new contact:", error.response?.data?.message);
@@ -57,7 +59,10 @@ export const getAllContacts = () => async (dispatch) => {
          return;
       }
       const config = {
-         headers: { "Content-Type": "application/json", token },
+         headers: {
+            "Content-Type": "application/json",
+            token
+         },
          withCredentials: true,
       };
 
@@ -72,7 +77,7 @@ export const getAllContacts = () => async (dispatch) => {
 };
 
 // delete contact
-export const deleteReview = (contactId) => async (dispatch) => {
+export const deleteContact = (contactId) => async (dispatch) => {
    try {
       dispatch(deleteContactsFormsRequest());
 
