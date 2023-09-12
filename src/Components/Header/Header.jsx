@@ -10,11 +10,12 @@ import {
   FaShoppingCart,
   FaListAlt,
 } from "react-icons/fa";
-import { BiLogOut, BiLogIn, BiSolidDashboard, BiMenu } from "react-icons/bi";
+import { BiLogOut, BiLogIn, BiSolidDashboard } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../Actions/userActions";
 import { ImMenu } from "react-icons/im";
 import { toggleCart } from "../../reducers/cartVisibilitySlice";
+import { fetchAllProducts } from "../../Actions/productActions";
 
 const Header = () => {
   // state and constants
@@ -25,9 +26,6 @@ const Header = () => {
   const [searchText, setSearchText] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(window.innerWidth > 940);
-  const [isJobsDropdownOpen, setIsJobsDropdownOpen] = useState(false);
-  const [isCompanyCategoriesDropdownOpen, setIsCompanyCategoriesDropdownOpen] =
-    useState(false);
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -45,16 +43,12 @@ const Header = () => {
   }, []);
 
   // functions
-  const handleSearch = (event) => {
-    setSearchQuery(searchText);
-  };
-  const toggleJobsDropdown = () => {
-    setIsJobsDropdownOpen(!isJobsDropdownOpen);
-    setIsCompanyCategoriesDropdownOpen(false);
-  };
-  const toggleCompanyCategoriesDropdown = () => {
-    setIsJobsDropdownOpen(false);
-    setIsCompanyCategoriesDropdownOpen(!isCompanyCategoriesDropdownOpen);
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      dispatch(fetchAllProducts(searchText));
+      setSearchText("");
+      navigation("/products");
+    }
   };
 
   const handleLogout = () => {
@@ -145,7 +139,7 @@ const Header = () => {
                 placeholder="Search..."
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
-                //   onKeyDown={handleSearch}
+                onKeyDown={handleSearch}
               />
             </div>
           </div>
